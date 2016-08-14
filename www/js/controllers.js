@@ -16,22 +16,32 @@ function ($scope, $stateParams) {
 
 }])
    
-.controller('detalleServicioCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
+.controller('detalleServicioCtrl', ['$scope', '$stateParams',
 function ($scope, $stateParams) {
 
-
+$scope.cambiarDetalleServicio= function () {
+  alert("tocaron el boton");
+}
 }])
    
-.controller('homeCtrl', ['$scope','$cordovaGeolocation',
-function ($scope,$cordovaGeolocation) {
-var camino=decode("}gpyG`toglCmAlKkChMkAOm@{@cAmAgAyAaA}@ad@yL}DkAmC}@_QuD~B_JpA_I^gDqBm@_A]mCz@kBk@",6);
-           var caminos=[];
+.controller('homeCtrl', ['$scope','$cordovaGeolocation','$http','LocationsService',
+function ($scope,$cordovaGeolocation,$http,LocationsService) {
+var caminoCodificado="";
+var caminos=[];
+$http.get('http://valhalla.mapzen.com/route?json={"locations":[{"lat":'+'4.62869'+',"lon":'+'-74.06472'+'},{"lat":'+'4.63086'+',"lon":'+'-74.06370'+'}],"costing":"pedestrian","directions_options":{"units":"miles"}}&id=my_work_route&api_key=valhalla-UDVJPyv')
+            .success(function (data) {
+                
+                caminoCodificado=String(data.trip.legs[0].shape);
+                console.log(caminoCodificado);
+                var camino=decode(caminoCodificado,6);
+                
           for (i = 0; i < camino.length; i++) { 
               var caminito={ lat: camino[i][0], lng: camino[i][1] };
               caminos.push(caminito);
           }
+            });
+
+
 $scope.localizarGPS = function(){
 
 
@@ -43,6 +53,13 @@ $scope.localizarGPS = function(){
             $scope.center.zoom = 17;
            	
         
+             $scope.markers.gps = {
+              lat:position.coords.latitude,
+              lng:position.coords.longitude,
+              message: "Estas aca!",
+              focus: true,
+              draggable: false
+            };
 
 
           }, function(err) {
@@ -53,28 +70,21 @@ $scope.localizarGPS = function(){
 
       };
 
+       var locations = LocationsService.savedLocations;
+
 angular.extend($scope, {
+        defaults: {
+            tileLayer: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+            maxZoom: 19,
+            minZoom: 17,
+            zoomControlPosition: 'bottomleft'
+          },
         center: {
             lat: 4.628399030,
             lng: -74.06361555,
             zoom: 17
         },
-       /*
-        paths:{
-        	cam:{
-        		type: "polyline",
-       			weight:3,
-       			latlngs: caminos
-        	}
-        },*/
-        defaults: {
-            
-        }
-    });
-    
-
-
-angular.extend($scope, {
+        markers: locations,
        
         paths:{
         	cam:{
@@ -82,9 +92,11 @@ angular.extend($scope, {
        			weight:3,
        			latlngs: caminos
         	}
-        }
-        
-    });
+        },
+            });
+    
+
+
 
 }])
    

@@ -2,7 +2,7 @@
     <ion-content padding="true" class="has-header">
         <h3 id="detalleServicio-heading1" style="color:#000000;text-align:center;">Teppanyaki Ingenieria</h3>
         <form id="detalleServicio-form5" class="list ">
-            <ion-toggle toggle-class="toggle-positive" ng-checked="true" id="detalleServicio-toggle1">¿Estoy Aca?</ion-toggle>
+            <ion-toggle toggle-class="toggle-positive" ng-checked="true" id="detalleServicio-toggle1" ng-model="checked">¿Estoy Aca?</ion-toggle>
         </form>
         <div>
             <img src="img/HdLGxx3URuWLCVqb6Gmr_article" width="90%" height="auto" style="display: block; margin-left: auto; margin-right: auto;">
@@ -15,18 +15,18 @@
             <ion-item class="range range-positive " id="detalleServicio-range5">
                 <input type="range" value="50" min="0" max="100">
             </ion-item>
-            <h4 id="detalleServicio-heading8" style="color:#000000;">Agregar Notificación de Disponibilidad</h4>
-            <div id="detalleServicio-button-bar4" class=" button-bar ">
+            <h4 id="detalleServicio-heading8" style="color:#000000;" ng-show="checked">Agregar Notificación de Disponibilidad</h4>
+            <div id="detalleServicio-button-bar4" class=" button-bar " ng-show="checked">
                 <button id="detalleServicio-button18" class=" button button-balanced  button-block icon ion-android-person "></button>
                 <button id="detalleServicio-button19" class=" button button-energized  button-block icon ion-android-people "></button>
                 <button id="detalleServicio-button20" class=" button button-assertive  button-block icon ion-ios-people "></button>
             </div>
-            <button id="detalleServicio-button21" class=" button button-positive  button-block ">Buscar Ruta</button>
+            <button id="detalleServicio-button21" class=" button button-positive  button-block " ng-hide="checked">Buscar Ruta</button>
             <h4 id="detalleServicio-heading3" style="color:#000000;">Comentarios</h4>
-            <label class="item item-input " id="detalleServicio-textarea1">
+            <label class="item item-input " id="detalleServicio-textarea1" ng-show="checked">
                 <span class="input-label"></span><textarea placeholder="Escribe aca tu comentario"></textarea>
             </label>
-            <button id="detalleServicio-button26" class=" button button-positive  button-block ">Enviar</button>
+            <button id="detalleServicio-button26" class=" button button-positive  button-block " ng-show="checked">Enviar</button>
             <ion-item class="item-icon-left  " id="detalleServicio-list-item19">
                 <i class="icon ion-android-contact"></i>Comentario 1
                 <span class="item-note">Hace 2 minutos</span>
