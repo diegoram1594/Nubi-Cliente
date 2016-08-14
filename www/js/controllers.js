@@ -16,16 +16,27 @@ function ($scope, $stateParams) {
 
 }])
    
-.controller('detalleServicioCtrl', ['$scope', '$stateParams',
-function ($scope, $stateParams) {
+.controller('detalleServicioCtrl', ['$scope', '$stateParams','$cordovaGeolocation',
+function ($scope, $stateParams,$cordovaGeolocation) {
 
-$scope.cambiarDetalleServicio= function () {
-  alert("tocaron el boton");
-}
+
+ $cordovaGeolocation
+          .getCurrentPosition()
+          .then(function (position) {
+            
+
+
+          }, function(err) {
+            // error
+            console.log("Location error!");
+            console.log(err);
+          });
+
 }])
    
 .controller('homeCtrl', ['$scope','$cordovaGeolocation','$http','LocationsService',
 function ($scope,$cordovaGeolocation,$http,LocationsService) {
+ 
 var caminoCodificado="";
 var caminos=[];
 $http.get('http://valhalla.mapzen.com/route?json={"locations":[{"lat":'+'4.62869'+',"lon":'+'-74.06472'+'},{"lat":'+'4.63086'+',"lon":'+'-74.06370'+'}],"costing":"pedestrian","directions_options":{"units":"miles"}}&id=my_work_route&api_key=valhalla-UDVJPyv')
@@ -75,7 +86,7 @@ $scope.localizarGPS = function(){
 angular.extend($scope, {
         defaults: {
             tileLayer: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-            maxZoom: 19,
+            maxZoom: 18,
             minZoom: 17,
             zoomControlPosition: 'bottomleft'
           },
