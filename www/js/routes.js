@@ -28,7 +28,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu.listaServicios', {
-    url: '/page9',
+    url: '/listaServicios:tipo',
     views: {
       'side-menu21': {
         templateUrl: 'templates/listaServicios.html',

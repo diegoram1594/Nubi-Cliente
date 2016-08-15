@@ -8,11 +8,13 @@ function ($scope, $stateParams) {
 
 }])
    
-.controller('listaServiciosCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
-
+.controller('listaServiciosCtrl', ['$scope', '$stateParams','ListaRestaurantes',
+function ($scope, $stateParams,ListaRestaurantes) {
+  var tipo=$stateParams.tipo;
+  if (tipo=="restaurantes") {
+    var ubi=ListaRestaurantes.savedLocations;
+  }
+$scope.ubicacionesCargadas=ubi;
 
 }])
    
@@ -36,7 +38,8 @@ function ($scope, $stateParams,$cordovaGeolocation) {
    
 .controller('homeCtrl', ['$scope','$cordovaGeolocation','$http','LocationsService',
 function ($scope,$cordovaGeolocation,$http,LocationsService) {
- 
+ $scope.cargarLista= function () {
+ }
 var caminoCodificado="";
 var caminos=[];
 $http.get('http://valhalla.mapzen.com/route?json={"locations":[{"lat":'+'4.62869'+',"lon":'+'-74.06472'+'},{"lat":'+'4.63086'+',"lon":'+'-74.06370'+'}],"costing":"pedestrian","directions_options":{"units":"miles"}}&id=my_work_route&api_key=valhalla-UDVJPyv')

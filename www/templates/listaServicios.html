@@ -1,15 +1,9 @@
 <ion-view title="Lista servicios" id="page9">
     <ion-content padding="true" class="has-header">
         <ion-list id="listaServicios-list2">
-            <ion-item class="item-thumbnail-left  " id="listaServicios-list-item13" ui-sref="menu.detalleServicio">
-                <img src="img/7IHkbLjlTACS087GTxG5_article.jpg">
-                <h2>Teppanyaki Ingenieria</h2>
-            </ion-item>
-            <ion-item class="item-thumbnail-left  " id="listaServicios-list-item14" ui-sref="menu.detalleServicio">
-                <h2>Burritos Baron</h2>
-            </ion-item>
-            <ion-item class="item-thumbnail-left  " id="listaServicios-list-item15" ui-sref="menu.detalleServicio">
-                <h2>Subway Basicas</h2>
+            <ion-item class="item-thumbnail-left  " ng-repeat="ubicacion in ubicacionesCargadas" ui-sref="menu.detalleServicio">
+                <img src={{ubicacion.imagen}}>
+                <h2>{{ubicacion.name}}</h2>
             </ion-item>
         </ion-list>
         <a ui-sref="menu.serviciosEnMapa" id="listaServicios-button17" class=" button button-positive  button-block ">Ver en Mapa</a>
