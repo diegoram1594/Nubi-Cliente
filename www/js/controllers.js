@@ -8,25 +8,25 @@ function ($scope, $stateParams) {
 
 }])
    
-.controller('listaServiciosCtrl', ['$scope', '$stateParams','ListaRestaurantes',
-function ($scope, $stateParams,ListaRestaurantes) {
+.controller('listaServiciosCtrl', ['$scope', '$stateParams','ListaServicios',
+function ($scope, $stateParams,ListaServicios) {
   var tipo=$stateParams.tipo;
   if (tipo=="restaurantes") {
-    var ubi=ListaRestaurantes.savedLocations;
+    var ubi=ListaServicios.restaurantes;
   }
 $scope.ubicacionesCargadas=ubi;
 
 }])
    
-.controller('detalleServicioCtrl', ['$scope', '$stateParams','$cordovaGeolocation',
-function ($scope, $stateParams,$cordovaGeolocation) {
-
-
+.controller('detalleServicioCtrl', ['$scope', '$stateParams','$cordovaGeolocation','ListaServicios',
+function ($scope, $stateParams,$cordovaGeolocation,ListaServicios) {
+$scope.imagenServicio=$stateParams.imagen;
+$scope.nombreServicio=$stateParams.nombre;
+console.log($stateParams);
  $cordovaGeolocation
           .getCurrentPosition()
           .then(function (position) {
             
-
 
           }, function(err) {
             // error
@@ -109,9 +109,6 @@ angular.extend($scope, {
         },
             });
     
-
-
-
 }])
    
 .controller('listaDeAmigosCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller

@@ -25,11 +25,11 @@ angular.module('app.services', [])
   return locationsObj;
 
 }])
-.factory('ListaRestaurantes', [ function() {
+.factory('ListaServicios', [ function() {
 
   var locationsObj = {};
 
-  locationsObj.savedLocations = [
+  locationsObj.restaurantes = [
     {
       name : "Restaurante de prueba",
       lat : 4.62869,
@@ -41,7 +41,7 @@ angular.module('app.services', [])
       name:"Italiano",
       lat:4.63086,
       lng: -74.06370,
-      imagen: "img/italiano.jpg"
+      imagen: "img/italiano.JPG"
     },
     {
       name:"La Pecera",
@@ -51,6 +51,7 @@ angular.module('app.services', [])
     }
 
   ];
+
 
   return locationsObj;
 

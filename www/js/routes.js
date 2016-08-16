@@ -38,7 +38,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu.detalleServicio', {
-    url: '/detalleserviciosPage',
+    url: '/detalleserviciosPage:nombre/:imagen',
     views: {
       'side-menu21': {
         templateUrl: 'templates/detalleServicio.html',
