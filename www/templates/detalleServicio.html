@@ -5,7 +5,8 @@
             <ion-toggle toggle-class="toggle-positive" ng-checked="false" id="detalleServicio-toggle1" ng-model="checked">¿Estoy Aca?</ion-toggle>
         </form>
         <div>
-            <img src='{{imagenServicio}}' width="90%" height="auto" style="display: block; margin-left: auto; margin-right: auto;">
+            <leaflet width="100%" height="300px" center="center" defaults="defaults" markers="markers" paths="paths" ng-show="botonBuscarRuta"></leaflet>
+            <img src='{{imagenServicio}}' ng-hide="botonBuscarRuta" width="90%" height="auto" style="display: block; margin-left: auto; margin-right: auto;">
         </div>
         <h4 id="detalleServicio-heading2" style="color:#000000;">Caracteristicas</h4>
         <div id="detalleServicio-button-bar2" class=" button-bar "></div>
@@ -21,7 +22,7 @@
                 <button id="detalleServicio-button19" class=" button button-energized  button-block icon ion-android-people "></button>
                 <button id="detalleServicio-button20" class=" button button-assertive  button-block icon ion-ios-people "></button>
             </div>
-            <button id="detalleServicio-button21" ui-sref="menu.buscarRuta({tipo:'restaurante',nombre:'{{nombreServicio}}'})" class=" button button-positive  button-block " ng-hide="checked">Buscar Ruta</button>
+            <button id="detalleServicio-button21" ng-click="mostrarRuta()" class=" button button-positive  button-block " ng-hide="checked">{{botonRuta}}</button>
             <h4 id="detalleServicio-heading3" style="color:#000000;">Comentarios</h4>
             <label class="item item-input " id="detalleServicio-textarea1" ng-show="checked">
                 <span class="input-label"></span><textarea placeholder="Escribe aca tu comentario"></textarea>
@@ -38,3 +39,4 @@
         </form>
     </ion-content>
 </ion-view>
+

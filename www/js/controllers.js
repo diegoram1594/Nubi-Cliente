@@ -18,22 +18,100 @@ $scope.ubicacionesCargadas=ubi;
 
 }])
    
-.controller('detalleServicioCtrl', ['$scope', '$stateParams','$cordovaGeolocation','ListaServicios',
-function ($scope, $stateParams,$cordovaGeolocation,ListaServicios) {
+.controller('detalleServicioCtrl', ['$scope', '$stateParams','$cordovaGeolocation','$http','ListaServicios',
+function ($scope, $stateParams,$cordovaGeolocation,$http,ListaServicios) {
+$scope.botonRuta="Buscar Ruta";
 $scope.imagenServicio=$stateParams.imagen;
 $scope.nombreServicio=$stateParams.nombre;
-console.log($stateParams);
- $cordovaGeolocation
+  var caminoCodificado="";
+var caminos=[];
+var lista=ListaServicios.restaurantes;
+var latFinal="";
+var lngFinal="";
+for (var i = 0; i<lista.length; i++) {
+  if (lista[i].message==$stateParams.nombre){
+    latFinal=lista[i].lat;
+    lngFinal=lista[i].lng;
+  }
+}
+
+$cordovaGeolocation
           .getCurrentPosition()
           .then(function (position) {
-            $scope.gpsLat=position.coords.latitude;
-             $scope.gpsLng=position.coords.longitude;
+            console.log()
+
+              $http.get('http://valhalla.mapzen.com/route?json={"locations":[{"lat":'+position.coords.latitude+',"lon":'+position.coords.longitude+'},{"lat":'+latFinal+',"lon":'+lngFinal+'}],"costing":"pedestrian","directions_options":{"units":"miles"}}&id=my_work_route&api_key=valhalla-UDVJPyv')
+            .success(function (data) {
+                
+                caminoCodificado=String(data.trip.legs[0].shape);
+                console.log(caminoCodificado);
+                var camino=decode(caminoCodificado,6);
+                
+          for (i = 0; i < camino.length; i++) { 
+              var caminito={ lat: camino[i][0], lng: camino[i][1] };
+              caminos.push(caminito);
+          }
+            });
+            
+        
+             $scope.markers= {gps:{
+              lat:position.coords.latitude,
+              lng:position.coords.longitude,
+              
+              focus: true,
+              draggable: false
+            },
+            llegada:{
+              lat:latFinal,
+              lng:lngFinal,
+             // message: $scope.nombreServicio,
+              focus: true,
+              draggable: false
+            }
+          };
+
 
           }, function(err) {
             // error
             console.log("Location error!");
             console.log(err);
           });
+
+
+
+angular.extend($scope, {
+        defaults: {
+            tileLayer: 'http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}',
+            maxZoom: 18,
+            minZoom: 17,
+            zoomControlPosition: 'bottomleft'
+          },
+        center: {
+            lat: 4.628399030,
+            lng: -74.06361555,
+            zoom: 17
+        },
+       
+        paths:{
+          cam:{
+            color: '#03B7B7',
+            type: "polyline",
+            weight:5,
+            latlngs: caminos
+          }
+        },
+            });
+
+$scope.mostrarRuta= function() {
+  if ($scope.botonRuta=="Buscar Ruta") {
+    $scope.botonRuta="Quitar Ruta";
+    $scope.botonBuscarRuta=true;
+  }
+  else{
+    $scope.botonRuta="Buscar Ruta";
+    $scope.botonBuscarRuta=false;
+  }
+}
 
 }])
    
@@ -72,7 +150,7 @@ $scope.localizarGPS = function(){
 
 angular.extend($scope, {
         defaults: {
-            tileLayer: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+            tileLayer: 'http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}',
             maxZoom: 18,
             minZoom: 17,
             zoomControlPosition: 'bottomleft'
@@ -194,7 +272,7 @@ angular.extend($scope, {
             lng: -74.06361555,
             zoom: 17
         },
-       markers: gps{},
+       
         paths:{
           cam:{
             type: "polyline",
