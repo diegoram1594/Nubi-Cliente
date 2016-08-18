@@ -1,9 +1,9 @@
 <ion-view title="Lista servicios" id="page9">
     <ion-content padding="true" class="has-header">
         <ion-list id="listaServicios-list2">
-            <ion-item class="item-thumbnail-left  " ng-repeat="ubicacion in ubicacionesCargadas" ui-sref="menu.detalleServicio({nombre:ubicacion.name, imagen:ubicacion.imagen})">
+            <ion-item class="item-thumbnail-left  " ng-repeat="ubicacion in ubicacionesCargadas" ui-sref="menu.detalleServicio({nombre:ubicacion.message, imagen:ubicacion.imagen})">
                 <img src='{{ubicacion.imagen}}'>
-                <h2>{{ubicacion.name}}</h2>
+                <h2>{{ubicacion.message}}</h2>
             </ion-item>
         </ion-list>
         <a ui-sref="menu.serviciosEnMapa" id="listaServicios-button17" class=" button button-positive  button-block ">Ver en Mapa</a>

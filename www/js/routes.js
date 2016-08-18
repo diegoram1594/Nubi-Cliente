@@ -97,6 +97,17 @@ angular.module('app.routes', [])
     }
   })
 
+  .state('menu.buscarRuta', {
+    url: '/buscarRuta:nombre/:tipo',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/buscarRuta.html',
+        controller: 'buscarRutaCtrl'
+      }
+    }
+  })
+
+
   .state('menu.crearAlertaGrupo', {
     url: '/crearAlerta',
     views: {

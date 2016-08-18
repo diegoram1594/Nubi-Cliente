@@ -10,12 +10,12 @@ angular.module('app.services', [])
 
   locationsObj.savedLocations = [
     {
-      name : "Javeriana",
+      message : "Javeriana",
       lat : 4.62869,
       lng : -74.06472
     },
     {
-    	name:"Italiano",
+    	message:"Italiano",
     	lat:4.63086,
     	lng: -74.06370
     }
@@ -31,25 +31,31 @@ angular.module('app.services', [])
 
   locationsObj.restaurantes = [
     {
-      name : "Restaurante de prueba",
+      message : "Restaurante de prueba",
       lat : 4.62869,
       lng : -74.06472,
       imagen:"img/7IHkbLjlTACS087GTxG5_article.jpg"
 
     },
     {
-      name:"Italiano",
+      message:"Italiano",
       lat:4.63086,
       lng: -74.06370,
       imagen: "img/italiano.JPG"
     },
     {
-      name:"La Pecera",
+      message:"La Pecera",
       lat:4.62818,
       lng: -74.06475,
       imagen: "img/7IHkbLjlTACS087GTxG5_article.jpg"
+    },
+    {
+      message:"Creperia",
+      lat:4.62723,
+      lng: -74.06261,
+      imagen: "img/italiano.JPG"
     }
-
+ 
   ];
 
 

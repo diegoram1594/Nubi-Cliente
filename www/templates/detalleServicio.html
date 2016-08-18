@@ -21,7 +21,7 @@
                 <button id="detalleServicio-button19" class=" button button-energized  button-block icon ion-android-people "></button>
                 <button id="detalleServicio-button20" class=" button button-assertive  button-block icon ion-ios-people "></button>
             </div>
-            <button id="detalleServicio-button21" class=" button button-positive  button-block " ng-hide="checked">Buscar Ruta</button>
+            <button id="detalleServicio-button21" ui-sref="menu.buscarRuta({tipo:'restaurante',nombre:'{{nombreServicio}}'})" class=" button button-positive  button-block " ng-hide="checked">Buscar Ruta</button>
             <h4 id="detalleServicio-heading3" style="color:#000000;">Comentarios</h4>
             <label class="item item-input " id="detalleServicio-textarea1" ng-show="checked">
                 <span class="input-label"></span><textarea placeholder="Escribe aca tu comentario"></textarea>
