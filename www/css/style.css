@@ -18,3 +18,50 @@ body {
 .tabs.border-top {
   border-top: 1px solid #ddd !important;
 }
+#botonRestaurantes{
+	width:55px;
+    height: 55px;
+    border-radius:100%;
+    background-color:red;   
+    background-size: 30px 30px;
+ 	position: absolute;
+ 	right: -150px;
+    bottom : 305px;
+
+}
+#botonFotocopia{
+	width:55px;
+    height: 55px;
+    border-radius:100%;
+    background-color:blue;   
+    background-size: 30px 30px;
+ 	position: absolute;
+ 	right: -100px;
+    bottom : 225px;
+   
+}
+#botonEstudio{
+	width:55px;
+    height: 55px;
+    border-radius:100%;
+    background-color:green;   
+    background-size: 30px 30px;
+ 	position: absolute;
+ 	right: -60px;
+    bottom : 145px;
+    
+}
+#botonBusquedaHome {
+    width:80px;
+    height: 80px;
+    border-radius:100%;
+    background-color:#5690f2;
+    background-image: url(img/busqueda.png);
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    right: 20px;
+    bottom : 55px;
+    box-shadow: 4px 5px 5px grey;
+}

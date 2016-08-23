@@ -1,14 +1,14 @@
 <ion-view title="NUBI" id="page15">
     <ion-content padding="true" class="has-header" >
-        <div id="home-button-bar3" class=" button-bar  data-tap-disabled="true">
-            <a ui-sref="menu.listaServicios({tipo:'restaurantes'})" id="home-button11" style="border-radius:-2px -2px -2px -2px;" class=" button button-positive  button-block icon ion-android-restaurant "></a>
-            <a ui-sref="menu.listaServicios({tipo:'fotocopias'})"  id="home-button14" class=" button button-positive  button-block icon ion-ios-copy "></a>
-            <a ui-sref="menu.listaServicios({tipo:'sitiosEstudio'})" id="home-button15" class=" button button-positive  button-block icon ion-ios-book "></a>
-        </div>
+       
+        <leaflet width="100%" height="100%" center="center" defaults="defaults" markers="markers" paths="paths"></leaflet>
+        
+        <div  id="botonRestaurantes" ui-sref="menu.listaServicios({tipo:'restaurantes'})"></div>
+        <div  id="botonFotocopia" ui-sref="menu.listaServicios({tipo:'fotocopias'})"></div>
+        <div  id="botonEstudio" ui-sref="menu.listaServicios({tipo:'sitiosEstudio'})"></div>
 
-        
-        <leaflet width="100%" height="380px" center="center" defaults="defaults" markers="markers" paths="paths"></leaflet>
-        
-        <button ng-click="localizarGPS()"" id="home-button12" class=" button button-positive  button-block icon ion-ios-bell "></button>
+        <div ng-click="mostrarServicios()" id="botonBusquedaHome">
+
+		</div>
     </ion-content>
 </ion-view>

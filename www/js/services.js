@@ -10,15 +10,26 @@ angular.module('app.services', [])
 
   locationsObj.savedLocations = [
     {
-      message : "Javeriana",
+      message : "Amigo 1",
       lat : 4.62869,
-      lng : -74.06472
+      lng : -74.06472,
+      //icon:{
+      //          iconUrl: 'img/giphy.gif',
+      //           iconSize:     [45, 45], 
+      //           iconAnchor:   [22.35, 40.05]  
+      //        }
     },
     {
-    	message:"Italiano",
+    	message:"Amigo 2",
     	lat:4.63086,
-    	lng: -74.06370
+    	lng: -74.06370,
+     // icon:{
+      //          iconUrl: 'img/giphy2.gif',
+      //           iconSize:     [45, 45], 
+      //          iconAnchor:   [22.35, 40.05]  
+     //    }
     }
+
 
   ];
 

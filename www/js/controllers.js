@@ -18,8 +18,8 @@ $scope.ubicacionesCargadas=ubi;
 
 }])
    
-.controller('detalleServicioCtrl', ['$scope', '$stateParams','$cordovaGeolocation','$http','ListaServicios',
-function ($scope, $stateParams,$cordovaGeolocation,$http,ListaServicios) {
+.controller('detalleServicioCtrl', ['$scope', '$stateParams','$cordovaGeolocation','$http','$ionicLoading','ListaServicios',
+function ($scope, $stateParams,$cordovaGeolocation,$http,$ionicLoading,ListaServicios) {
 $scope.botonRuta="Buscar Ruta";
 $scope.imagenServicio=$stateParams.imagen;
 $scope.nombreServicio=$stateParams.nombre;
@@ -38,13 +38,13 @@ for (var i = 0; i<lista.length; i++) {
 $cordovaGeolocation
           .getCurrentPosition()
           .then(function (position) {
-            console.log()
+            
 
               $http.get('http://valhalla.mapzen.com/route?json={"locations":[{"lat":'+position.coords.latitude+',"lon":'+position.coords.longitude+'},{"lat":'+latFinal+',"lon":'+lngFinal+'}],"costing":"pedestrian","directions_options":{"units":"miles"}}&id=my_work_route&api_key=valhalla-UDVJPyv')
             .success(function (data) {
                 
                 caminoCodificado=String(data.trip.legs[0].shape);
-                console.log(caminoCodificado);
+      
                 var camino=decode(caminoCodificado,6);
                 
           for (i = 0; i < camino.length; i++) { 
@@ -57,24 +57,39 @@ $cordovaGeolocation
              $scope.markers= {gps:{
               lat:position.coords.latitude,
               lng:position.coords.longitude,
-              
-              focus: true,
-              draggable: false
-            },
+              icon:{
+                iconUrl: 'img/gpsSalida.png',
+                 iconSize:     [45, 45], 
+                 iconAnchor:   [22.35, 40.05]  
+              }
+              },
             llegada:{
               lat:latFinal,
               lng:lngFinal,
              // message: $scope.nombreServicio,
+             icon:{
+                iconUrl: 'img/gpsLlegada.png',
+                 iconSize:     [45, 45], 
+                 iconAnchor:   [22.35, 40.05]  
+              },
               focus: true,
               draggable: false
             }
           };
 
+          $scope.center={
+            lat:position.coords.latitude,
+            lng:position.coords.longitude,
+            zoom: 16
+          }
+          $scope.caminoCargado=true;
+          $ionicLoading.hide();
 
           }, function(err) {
             // error
             console.log("Location error!");
             console.log(err);
+
           });
 
 
@@ -94,7 +109,7 @@ angular.extend($scope, {
        
         paths:{
           cam:{
-            color: '#03B7B7',
+            color: '#1fbad6',
             type: "polyline",
             weight:5,
             latlngs: caminos
@@ -106,17 +121,40 @@ $scope.mostrarRuta= function() {
   if ($scope.botonRuta=="Buscar Ruta") {
     $scope.botonRuta="Quitar Ruta";
     $scope.botonBuscarRuta=true;
+    if ($scope.caminoCargado!=true) {
+      $ionicLoading.show();
+    }
+    
   }
   else{
     $scope.botonRuta="Buscar Ruta";
-    $scope.botonBuscarRuta=false;
+    $scope.botonBuscarRuta=false;    
+    
   }
 }
 
 }])
    
-.controller('homeCtrl', ['$scope','$cordovaGeolocation','$http','LocationsService',
-function ($scope,$cordovaGeolocation,$http,LocationsService) {
+.controller('homeCtrl', ['$scope','$cordovaGeolocation','$http','$window','LocationsService',
+function ($scope,$cordovaGeolocation,$http,$window,LocationsService) {
+$scope.mostrarUbicaciones=false;
+$scope.mostrarServicios= function(){
+
+  if ($scope.mostrarUbicaciones==true) {
+    $scope.mostrarUbicaciones=false;
+     $("#botonEstudio").animate({right: "-60px"});
+    $("#botonFotocopia").animate({right: "-100px"});
+    $("#botonRestaurantes").animate({right: "-150px"});
+    
+  }
+  else{
+    $scope.mostrarUbicaciones=true;
+    $("#botonEstudio").animate({right: "30px"});
+    $("#botonFotocopia").animate({right: "30px"});
+    $("#botonRestaurantes").animate({right: "30px"});
+    
+  }
+};
 
 $scope.localizarGPS = function(){
 
@@ -227,13 +265,12 @@ for (var i = 0; i<lista.length; i++) {
 $cordovaGeolocation
           .getCurrentPosition()
           .then(function (position) {
-            console.log()
+            
 
               $http.get('http://valhalla.mapzen.com/route?json={"locations":[{"lat":'+position.coords.latitude+',"lon":'+position.coords.longitude+'},{"lat":'+latFinal+',"lon":'+lngFinal+'}],"costing":"pedestrian","directions_options":{"units":"miles"}}&id=my_work_route&api_key=valhalla-UDVJPyv')
             .success(function (data) {
                 
                 caminoCodificado=String(data.trip.legs[0].shape);
-                console.log(caminoCodificado);
                 var camino=decode(caminoCodificado,6);
                 
           for (i = 0; i < camino.length; i++) { 

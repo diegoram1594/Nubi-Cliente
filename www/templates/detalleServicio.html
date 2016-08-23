@@ -1,11 +1,14 @@
-<ion-view title="Detalle Servicio" id="page10">
+<ion-view title={{nombreServicio}} id="page10">
+    <ion-nav-buttons side="right">
+        <button ng-click="mostrarRuta()" class="button button-icon icon ion-android-map"></button>
+    </ion-nav-buttons>
+
     <ion-content padding="true" class="has-header">
-        <h3 id="detalleServicio-heading1" style="color:#000000;text-align:center;">{{nombreServicio}}</h3>
         <form id="detalleServicio-form5" class="list ">
             <ion-toggle toggle-class="toggle-positive" ng-checked="false" id="detalleServicio-toggle1" ng-model="checked">¿Estoy Aca?</ion-toggle>
         </form>
         <div>
-            <leaflet width="100%" height="300px" center="center" defaults="defaults" markers="markers" paths="paths" ng-show="botonBuscarRuta"></leaflet>
+            <leaflet width="100%" height="300px" center="center" defaults="defaults" markers="markers" paths="paths" ng-show="botonBuscarRuta" ></leaflet>
             <img src='{{imagenServicio}}' ng-hide="botonBuscarRuta" width="90%" height="auto" style="display: block; margin-left: auto; margin-right: auto;">
         </div>
         <h4 id="detalleServicio-heading2" style="color:#000000;">Caracteristicas</h4>
@@ -22,7 +25,7 @@
                 <button id="detalleServicio-button19" class=" button button-energized  button-block icon ion-android-people "></button>
                 <button id="detalleServicio-button20" class=" button button-assertive  button-block icon ion-ios-people "></button>
             </div>
-            <button id="detalleServicio-button21" ng-click="mostrarRuta()" class=" button button-positive  button-block " ng-hide="checked">{{botonRuta}}</button>
+    
             <h4 id="detalleServicio-heading3" style="color:#000000;">Comentarios</h4>
             <label class="item item-input " id="detalleServicio-textarea1" ng-show="checked">
                 <span class="input-label"></span><textarea placeholder="Escribe aca tu comentario"></textarea>
