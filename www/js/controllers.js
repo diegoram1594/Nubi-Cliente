@@ -11,6 +11,7 @@ function ($scope, $stateParams) {
 .controller('listaServiciosCtrl', ['$scope', '$stateParams','ListaServicios',
 function ($scope, $stateParams,ListaServicios) {
   var tipo=$stateParams.tipo;
+
   if (tipo=="restaurantes") {
     var ubi=ListaServicios.restaurantes;
   }
@@ -135,26 +136,59 @@ $scope.mostrarRuta= function() {
 
 }])
    
-.controller('homeCtrl', ['$scope','$cordovaGeolocation','$http','$window','LocationsService',
-function ($scope,$cordovaGeolocation,$http,$window,LocationsService) {
+.controller('homeCtrl', ['$scope','$cordovaGeolocation','$http','$window','LocationsService','ListaServicios',
+function ($scope,$cordovaGeolocation,$http,$window,LocationsService,ListaServicios) {
 $scope.mostrarUbicaciones=false;
 $scope.mostrarServicios= function(){
-
-  if ($scope.mostrarUbicaciones==true) {
+if ($scope.servicioActual!="restaurantes") {
+  if ($scope.mostrarUbicaciones==true  ) {
     $scope.mostrarUbicaciones=false;
+    $("#botonBusquedaHome").css({"background-image": "url(css/img/busqueda.png)","background-size": "30px 30px"});
      $("#botonEstudio").animate({right: "-60px"});
     $("#botonFotocopia").animate({right: "-100px"});
     $("#botonRestaurantes").animate({right: "-150px"});
+    $("#botonAmigo").animate({right: "-200px"});
     
   }
   else{
     $scope.mostrarUbicaciones=true;
+    $("#botonBusquedaHome").css({"background-image": "url(css/img/home.png)","background-size": "80px 80px"});
+    $("#botonAmigo").animate({right: "30px"});
     $("#botonEstudio").animate({right: "30px"});
     $("#botonFotocopia").animate({right: "30px"});
     $("#botonRestaurantes").animate({right: "30px"});
     
   }
+ }
+ else{
+  $scope.servicioActual="ninguno";
+  $("#botonBusquedaHome").css({"background-image": "url(css/img/home.png)","background-size": "80px 80px"});
+  $("#botonAmigo").animate({right: "30px"});
+  $("#botonEstudio").animate({right: "30px"});
+  $("#botonFotocopia").animate({right: "30px"});
+  $("#botonRestaurantes").animate({right: "30px"});
+  $("#verLista").animate({bottom : "-45px"});
+  var locations = LocationsService.savedLocations;
+  $scope.markers=locations;
+
+ }
 };
+
+$scope.mostrarEnMapa=function(tipoServicio){
+
+  $("#verLista").animate({bottom : "55px"});
+  $("#botonBusquedaHome").css({"background-image": "url(css/img/back.png)","background-size": "30px 30px"});
+  if (tipoServicio=='restaurantes') { 
+    $scope.servicioActual='restaurantes';
+    var locations=ListaServicios.restaurantes;
+    $scope.markers=locations;
+    $("#botonAmigo").animate({right: "-100px"});
+    $("#botonEstudio").animate({right: "-100px"});
+    $("#botonFotocopia").animate({right: "-100px"});
+
+}
+ 
+}
 
 $scope.localizarGPS = function(){
 

@@ -18,15 +18,31 @@ body {
 .tabs.border-top {
   border-top: 1px solid #ddd !important;
 }
-#botonRestaurantes{
+#botonAmigo{
 	width:55px;
     height: 55px;
     border-radius:100%;
     background-color:red;   
     background-size: 30px 30px;
  	position: absolute;
- 	right: -150px;
+ 	right: -100px;
+    bottom : 385px;
+    box-shadow: 4px 5px 5px grey;
+
+}
+#botonRestaurantes{
+	width:55px;
+    height: 55px;
+    border-radius:100%;
+    background-color:white; 
+    background-image: url(img/restaurantes.png);
+ 	background-repeat: no-repeat;
+    background-position: center;
+    background-size: 30px 30px;
+ 	position: absolute;
+ 	right: -100px;
     bottom : 305px;
+    box-shadow: 4px 5px 5px grey;
 
 }
 #botonFotocopia{
@@ -38,6 +54,7 @@ body {
  	position: absolute;
  	right: -100px;
     bottom : 225px;
+    box-shadow: 4px 5px 5px grey;
    
 }
 #botonEstudio{
@@ -47,8 +64,9 @@ body {
     background-color:green;   
     background-size: 30px 30px;
  	position: absolute;
- 	right: -60px;
+ 	right: -100px;
     bottom : 145px;
+    box-shadow: 4px 5px 5px grey;
     
 }
 #botonBusquedaHome {
@@ -64,4 +82,19 @@ body {
     right: 20px;
     bottom : 55px;
     box-shadow: 4px 5px 5px grey;
+}
+
+#verLista {
+    width:40%;
+    height: 30px;
+    border-radius:12%;
+    background-color:white;
+    position: absolute;
+    right: 35%;
+    bottom : -30px;
+    box-shadow: 10px 8px 5px grey;
+    text-align: center;
+    border: 3px solid #4968bd;
+    color: #2f395c;
+    font-weight: bold;
 }

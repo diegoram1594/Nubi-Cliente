@@ -3,12 +3,13 @@
        
         <leaflet width="100%" height="100%" center="center" defaults="defaults" markers="markers" paths="paths"></leaflet>
         
-        <div  id="botonRestaurantes" ui-sref="menu.listaServicios({tipo:'restaurantes'})"></div>
-        <div  id="botonFotocopia" ui-sref="menu.listaServicios({tipo:'fotocopias'})"></div>
-        <div  id="botonEstudio" ui-sref="menu.listaServicios({tipo:'sitiosEstudio'})"></div>
+        <div  id="botonRestaurantes" ng-click="mostrarEnMapa('restaurantes')"></div>
+        <div  id="botonFotocopia" ></div>
+        <div  id="botonEstudio" ></div>
+        <div  id="botonAmigo" ></div>
 
-        <div ng-click="mostrarServicios()" id="botonBusquedaHome">
+        <div ng-click="mostrarServicios()" id="botonBusquedaHome"></div>
+        <div  id="verLista" ui-sref="menu.listaServicios({tipo:'restaurantes'})">   Ver Lista   </div>
 
-		</div>
     </ion-content>
 </ion-view>
