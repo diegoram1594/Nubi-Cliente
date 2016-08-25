@@ -8,7 +8,7 @@
             <ion-toggle toggle-class="toggle-positive" ng-checked="false" id="detalleServicio-toggle1" ng-model="checked">¿Estoy Aca?</ion-toggle>
         </form>
         <div>
-            <leaflet width="100%" height="300px" center="center" defaults="defaults" markers="markers" paths="paths" ng-show="botonBuscarRuta" ></leaflet>
+            <leaflet data-tap-disabled="true"  width="100%" height="300px" center="center" defaults="defaults" markers="markers" paths="paths" ng-show="botonBuscarRuta" ></leaflet>
             <img src='{{imagenServicio}}' ng-hide="botonBuscarRuta" width="90%" height="auto" style="display: block; margin-left: auto; margin-right: auto;">
         </div>
         <h4 id="detalleServicio-heading2" style="color:#000000;">Caracteristicas</h4>

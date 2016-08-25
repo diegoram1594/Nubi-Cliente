@@ -4,38 +4,6 @@ angular.module('app.services', [])
 
 }])
 
-.factory('LocationsService', [ function() {
-
-  var locationsObj = {};
-
-  locationsObj.savedLocations = [
-    {
-      message : "Amigo 1",
-      lat : 4.62869,
-      lng : -74.06472,
-      //icon:{
-      //          iconUrl: 'img/giphy.gif',
-      //           iconSize:     [45, 45], 
-      //           iconAnchor:   [22.35, 40.05]  
-      //        }
-    },
-    {
-    	message:"Amigo 2",
-    	lat:4.63086,
-    	lng: -74.06370,
-     // icon:{
-      //          iconUrl: 'img/giphy2.gif',
-      //           iconSize:     [45, 45], 
-      //          iconAnchor:   [22.35, 40.05]  
-     //    }
-    }
-
-
-  ];
-
-  return locationsObj;
-
-}])
 .factory('ListaServicios', [ function() {
 
   var locationsObj = {};

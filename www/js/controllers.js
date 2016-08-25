@@ -67,7 +67,7 @@ $cordovaGeolocation
             llegada:{
               lat:latFinal,
               lng:lngFinal,
-             // message: $scope.nombreServicio,
+              message: $scope.nombreServicio,
              icon:{
                 iconUrl: 'img/gpsLlegada.png',
                  iconSize:     [45, 45], 
@@ -81,6 +81,7 @@ $cordovaGeolocation
           $scope.center={
             lat:position.coords.latitude,
             lng:position.coords.longitude,
+            message:"Estás aquí",
             zoom: 16
           }
           $scope.caminoCargado=true;
@@ -136,8 +137,8 @@ $scope.mostrarRuta= function() {
 
 }])
    
-.controller('homeCtrl', ['$scope','$cordovaGeolocation','$http','$window','LocationsService','ListaServicios',
-function ($scope,$cordovaGeolocation,$http,$window,LocationsService,ListaServicios) {
+.controller('homeCtrl', ['$scope','$cordovaGeolocation','$http','$window','ListaServicios',
+function ($scope,$cordovaGeolocation,$http,$window,ListaServicios) {
 $scope.mostrarUbicaciones=false;
 $scope.mostrarServicios= function(){
 if ($scope.servicioActual!="restaurantes") {
@@ -168,11 +169,14 @@ if ($scope.servicioActual!="restaurantes") {
   $("#botonFotocopia").animate({right: "30px"});
   $("#botonRestaurantes").animate({right: "30px"});
   $("#verLista").animate({bottom : "-45px"});
-  var locations = LocationsService.savedLocations;
-  $scope.markers=locations;
+  $scope.markers={}
+  
 
  }
 };
+
+
+
 
 $scope.mostrarEnMapa=function(tipoServicio){
 
@@ -218,21 +222,26 @@ $scope.localizarGPS = function(){
 
       };
 
-       var locations = LocationsService.savedLocations;
 
 angular.extend($scope, {
         defaults: {
             tileLayer: 'http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}',
             maxZoom: 18,
             minZoom: 17,
-            zoomControlPosition: 'bottomleft'
+            zoomControl: false,
           },
         center: {
             lat: 4.628399030,
             lng: -74.06361555,
             zoom: 17
         },
-        markers: locations,
+        events: {
+            map: {
+              enable: ['context'],
+              logic: 'emit'
+            }
+          }
+    
        
             });
     
