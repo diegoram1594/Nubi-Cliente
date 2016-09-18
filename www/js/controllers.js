@@ -1,10 +1,64 @@
-angular.module('app.controllers',  ['leaflet-directive'])
+angular.module('app.controllers',  ['leaflet-directive','ngAnimate'])
         
 .controller('configuraciNCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams) {
 
+
+}])
+
+
+.controller('configuracionInicialCtrl', ['$scope', '$stateParams', 
+function ($scope, $stateParams) {
+  $scope.valorRango=300;
+  respuestas=[];
+  $scope.esconderRegresar=true;
+  numPregunta=1;
+  preguntas1=[{opcion:'hola',color:'#0092D7',fondo:''},{opcion:'Tu',color:'#0092D7',fondo:''},{opcion:'Como',color:'#0092D7',fondo:''},{opcion:'Estas',color:'#0092D7',fondo:''}]
+  preguntas2=[{opcion:'Otra',color:'#0092D7',fondo:''},{opcion:'Pregunta',color:'#0092D7',fondo:''},{opcion:'Por',color:'#0092D7',fondo:''},{opcion:'Aca',color:'#0092D7',fondo:''}]
+  preguntas3=[{opcion:'Esta',color:'#0092D7',fondo:''},{opcion:'Es',color:'#0092D7',fondo:''},{opcion:'La',color:'#0092D7',fondo:''},{opcion:'Tercera',color:'#0092D7',fondo:''}]
+ $scope.respuestasCargadas = preguntas1;
+$scope.siguientePregunta= function(respuesta) {
+  respuestas[numPregunta-1]=respuesta;
+  for (var i = 0; i < $scope.respuestasCargadas.length; i++) {
+    if (respuesta==$scope.respuestasCargadas[i].opcion) {
+      $scope.respuestasCargadas[i].color='white';
+      $scope.respuestasCargadas[i].fondo='#0092D7';
+    }
+    else{
+      $scope.respuestasCargadas[i].color='#0092D7';
+      $scope.respuestasCargadas[i].fondo='';
+    }
+  }
+  if (numPregunta<4) {
+      numPregunta+=1;
+  }
+  else{
+    alert (respuestas);
+  }
+  $scope.esconderRegresar=false;
+  if (numPregunta==2){
+    $scope.respuestasCargadas = preguntas2;
+    }
+  if (numPregunta==3) {
+    $scope.respuestasCargadas = preguntas3;
+  }
+}
+  $scope.preguntaAnterior=function(){
+    numPregunta-=1;
+    if (numPregunta==1) {
+      $scope.esconderRegresar=true;
+      $scope.respuestasCargadas = preguntas1;
+    }
+    if (numPregunta==2){
+    $scope.respuestasCargadas = preguntas2;
+    }
+    if (numPregunta==3) {
+    $scope.respuestasCargadas = preguntas3;
+    }
+
+  }
 
 }])
    
@@ -19,11 +73,54 @@ $scope.ubicacionesCargadas=ubi;
 
 }])
    
-.controller('detalleServicioCtrl', ['$scope', '$stateParams','$cordovaGeolocation','$http','$ionicLoading','ListaServicios',
-function ($scope, $stateParams,$cordovaGeolocation,$http,$ionicLoading,ListaServicios) {
+.controller('detalleServicioCtrl', ['$scope', '$stateParams','$cordovaGeolocation','$http','$ionicLoading','$ionicPopup','ListaServicios',
+function ($scope, $stateParams,$cordovaGeolocation,$http,$ionicLoading,$ionicPopup,ListaServicios) {
 $scope.botonRuta="Buscar Ruta";
 $scope.imagenServicio=$stateParams.imagen;
 $scope.nombreServicio=$stateParams.nombre;
+
+
+var aleatorio = Math.round(Math.random()*100);
+var elem = document.getElementById("myBar");
+  var width = 1;
+  var id = setInterval(frame, 10);
+  
+  function frame() {
+    if (width >= aleatorio) {
+      clearInterval(id);
+    } else {
+      width++;
+      if (width<33) {
+      
+        elem.style.backgroundColor="#53EC05";
+      }
+      else{
+        if (width<66) {
+            elem.style.backgroundColor="#ffc04c";
+        }
+        else{
+            elem.style.backgroundColor="red";
+        }
+      }
+      elem.style.width = width + '%';
+    }
+  }
+
+
+ 
+$http.get('http://192.168.43.117:8080/REST_war_exploded/prueba/hola')
+            .success(function (data) {
+              var felipeJson=String(data.cad);
+              var alertPopup = $ionicPopup.alert({
+                            title: 'Hola!!',
+                             template: felipeJson
+                            });  
+                
+            });
+
+
+//
+
   var caminoCodificado="";
 var caminos=[];
 var lista=ListaServicios.restaurantes;
@@ -58,6 +155,7 @@ $cordovaGeolocation
              $scope.markers= {gps:{
               lat:position.coords.latitude,
               lng:position.coords.longitude,
+              message:"Estás aquí",
               icon:{
                 iconUrl: 'img/gpsSalida.png',
                  iconSize:     [45, 45], 
@@ -72,9 +170,7 @@ $cordovaGeolocation
                 iconUrl: 'img/gpsLlegada.png',
                  iconSize:     [45, 45], 
                  iconAnchor:   [22.35, 40.05]  
-              },
-              focus: true,
-              draggable: false
+              }
             }
           };
 
@@ -98,7 +194,7 @@ $cordovaGeolocation
 
 angular.extend($scope, {
         defaults: {
-            tileLayer: 'http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}',
+            tileLayer: 'http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png',
             maxZoom: 18,
             minZoom: 17,
             zoomControlPosition: 'bottomleft'
@@ -223,10 +319,12 @@ $scope.localizarGPS = function(){
       };
 
 
+
+
 angular.extend($scope, {
         defaults: {
-            tileLayer: 'http://korona.geog.uni-heidelberg.de/tiles/roads/x={x}&y={y}&z={z}',
-            maxZoom: 18,
+            tileLayer:'http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png' ,
+            maxZoom: 17,
             minZoom: 17,
             zoomControl: false,
           },
@@ -244,6 +342,8 @@ angular.extend($scope, {
     
        
             });
+
+
     
 }])
    
@@ -260,8 +360,8 @@ function ($scope, $stateParams,ListaServicios) {
   var locations=ListaServicios.restaurantes;
 angular.extend($scope, {
         defaults: {
-            tileLayer: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-            maxZoom: 18,
+            tileLayer: 'http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png',
+            maxZoom: 17,
             minZoom: 17,
             zoomControlPosition: 'bottomleft'
           },
@@ -342,7 +442,7 @@ $cordovaGeolocation
 
 angular.extend($scope, {
         defaults: {
-            tileLayer: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+            tileLayer: 'http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png',
             maxZoom: 18,
             minZoom: 17,
             zoomControlPosition: 'bottomleft'

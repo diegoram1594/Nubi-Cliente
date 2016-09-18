@@ -26,6 +26,16 @@ angular.module('app.routes', [])
       }
     }
   })
+  .state('menu.configuracionInicial', {
+    url: '/usuarioConfiguracionInicial',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/configuracionInicial.html',
+        controller: 'configuracionInicialCtrl'
+      }
+    }
+  })
+
 
   .state('menu.listaServicios', {
     url: '/listaServicios:tipo',

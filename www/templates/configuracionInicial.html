@@ -1,0 +1,12 @@
+<ion-view title="Configuracion Inicial" id="Inicial">
+    <ion-content padding="true" class="has-header">
+
+    	<div id="preguntaArriba"><h2 id="textoPregunta">Hola soy una pregunta ¿dsadsadsadsadad?</h2></div>
+    	<div id="preguntaAtras" ng-hide="esconderRegresar" ng-click="preguntaAnterior()"> <h4 id="textoRegresarPregunta">Regresar</h4></div>
+    	<div id="respuesta" ng-repeat="respuestas in respuestasCargadas" ng-animate="'animate'"  ng-click="siguientePregunta('{{respuestas.opcion}}')" style="color:{{respuestas.color}};background-color:{{respuestas.fondo}};" >{{respuestas.opcion}}</div>
+    	<div class = "item range" id="rango" ng-show="respuestaMultiple">
+      		<input type = "range" name = "tamanoRango" min="20" max="750" value="{{valorRango}}">
+   		</div>
+   		<div id="contenedorTextoRango" ng-show="respuestaMultiple"><input type="text" name="tamanoRangoTexto" value="{{valorRango}}"></div>
+    </ion-content>
+</ion-view>

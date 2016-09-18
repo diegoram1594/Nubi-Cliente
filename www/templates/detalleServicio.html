@@ -1,36 +1,26 @@
 <ion-view title={{nombreServicio}} id="page10">
     <ion-nav-buttons side="right">
-        <button ng-click="mostrarRuta()" class="button button-icon icon ion-android-map"></button>
+        <button ng-click="mostrarRuta()" class="button button-icon icon ion-android-map">Buscar Ruta</button>
     </ion-nav-buttons>
 
     <ion-content padding="true" class="has-header">
-        <form id="detalleServicio-form5" class="list ">
-            <ion-toggle toggle-class="toggle-positive" ng-checked="false" id="detalleServicio-toggle1" ng-model="checked">¿Estoy Aca?</ion-toggle>
-        </form>
-        <div>
+        
+ 
+         <div id="contenedor">
             <leaflet data-tap-disabled="true"  width="100%" height="300px" center="center" defaults="defaults" markers="markers" paths="paths" ng-show="botonBuscarRuta" ></leaflet>
             <img src='{{imagenServicio}}' ng-hide="botonBuscarRuta" width="90%" height="auto" style="display: block; margin-left: auto; margin-right: auto;">
+            <div id="Notificar">Notificar</div>
         </div>
-        <h4 id="detalleServicio-heading2" style="color:#000000;">Caracteristicas</h4>
-        <div id="detalleServicio-button-bar2" class=" button-bar "></div>
-        <p id="detalleServicio-markdown1" style="color:#000000;">&lt;Iconos de caracteristicas del servicio&gt;</p>
+     
         <h4 id="detalleServicio-heading7" style="color:#000000;">Disponibilidad</h4>
         <form id="detalleServicio-form6" class="list ">
-            <ion-item class="range range-positive " id="detalleServicio-range5">
-                <input type="range" value="50" min="0" max="100">
-            </ion-item>
-            <h4 id="detalleServicio-heading8" style="color:#000000;" ng-show="checked">Agregar Notificación de Disponibilidad</h4>
-            <div id="detalleServicio-button-bar4" class=" button-bar " ng-show="checked">
-                <button id="detalleServicio-button18" class=" button button-balanced  button-block icon ion-android-person "></button>
-                <button id="detalleServicio-button19" class=" button button-energized  button-block icon ion-android-people "></button>
-                <button id="detalleServicio-button20" class=" button button-assertive  button-block icon ion-ios-people "></button>
-            </div>
+        <div id="myProgress">
+            <div id="myBar"></div>
+        </div>
+
+           
     
             <h4 id="detalleServicio-heading3" style="color:#000000;">Comentarios</h4>
-            <label class="item item-input " id="detalleServicio-textarea1" ng-show="checked">
-                <span class="input-label"></span><textarea placeholder="Escribe aca tu comentario"></textarea>
-            </label>
-            <button id="detalleServicio-button26" class=" button button-positive  button-block " ng-show="checked">Enviar</button>
             <ion-item class="item-icon-left  " id="detalleServicio-list-item19">
                 <i class="icon ion-android-contact"></i>Comentario 1
                 <span class="item-note">Hace 2 minutos</span>
@@ -39,6 +29,11 @@
                 <i class="icon ion-android-contact"></i>Comentario 2
                 <span class="item-note">Hace 20 minutos</span>
             </ion-item>
+            <ion-item class="item-icon-left  " id="detalleServicio-list-item20">
+                <i class="icon ion-android-contact"></i>Comentario 3
+                <span class="item-note">Hace 15 minutos</span>
+            </ion-item>
+
         </form>
     </ion-content>
 </ion-view>
