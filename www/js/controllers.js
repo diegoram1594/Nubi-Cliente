@@ -238,7 +238,10 @@ $scope.abrirPanelNotificacion=function(){
   $scope.panelNotificacionActivado=true;
   $scope.botonBuscarRuta=false; 
     $scope.botonMostarImagen=true;
+    $scope.botonRuta="Buscar Ruta";
   $("#contenedorImagen").css({"opacity": "0.3"});
+
+  
 
 }
 $scope.cancelarPanelNotificacion=function(){
@@ -246,7 +249,60 @@ $scope.cancelarPanelNotificacion=function(){
   $scope.botonBuscarRuta=false; 
     $scope.botonMostarImagen=true;
   $("#contenedorImagen").css({"opacity": "1"});
+  $scope.botonRuta=="Buscar Ruta"
+  $("#notificacionVacio").css({"background-image": "url(css/img/vacio.png)"});
+      $("#notificacionMedio").css({"background-image": "url(css/img/medio.png)"});
+      $("#notificacionLleno").css({"background-image": "url(css/img/lleno.png)"});
+      notificacionEscogida="";
+      $scope.notificacionSeleccionada=false;
 }
+notificacionEscogida="";
+$scope.enviarNotificacion=function(){
+  if (notificacionEscogida!="") {
+   var alertPopup = $ionicPopup.alert({
+     title: 'Notificación Enviada '+notificacionEscogida,
+     template: 'Gracias por ayudarnos a mejorar :)'
+   });
+   $scope.panelNotificacionActivado=false;
+  $scope.botonBuscarRuta=false; 
+    $scope.botonMostarImagen=true;
+  $("#contenedorImagen").css({"opacity": "1"});
+  $scope.botonRuta=="Buscar Ruta"
+  $("#notificacionVacio").css({"background-image": "url(css/img/vacio.png)"});
+      $("#notificacionMedio").css({"background-image": "url(css/img/medio.png)"});
+      $("#notificacionLleno").css({"background-image": "url(css/img/lleno.png)"});
+      notificacionEscogida="";
+      $scope.notificacionSeleccionada=false;
+  }
+  else{
+    var alertPopup = $ionicPopup.alert({
+     title: 'Error ',
+     template: 'Escoge la disponibilidad del lugar'
+   });
+  }
+}
+
+$scope.seleccionDisponibilidad=function(eleccion){
+  $scope.notificacionSeleccionada=true;
+  if (eleccion=="vacio") {
+    notificacionEscogida="vacio";
+      $("#notificacionVacio").css({"background-image": "url(css/img/vacioSeleccionado.png)"});
+      $("#notificacionMedio").css({"background-image": "url(css/img/medio.png)"});
+      $("#notificacionLleno").css({"background-image": "url(css/img/lleno.png)"});
+    }
+  if (eleccion=="medio") {
+    notificacionEscogida="medio";
+      $("#notificacionMedio").css({"background-image": "url(css/img/medioSeleccionado.png)"});
+      $("#notificacionVacio").css({"background-image": "url(css/img/vacio.png)"});
+      $("#notificacionLleno").css({"background-image": "url(css/img/lleno.png)"});
+    }  
+  if (eleccion=="lleno") {
+    notificacionEscogida="lleno";
+      $("#notificacionLleno").css({"background-image": "url(css/img/llenoSeleccionado.png)"});
+      $("#notificacionVacio").css({"background-image": "url(css/img/vacio.png)"});
+      $("#notificacionMedio").css({"background-image": "url(css/img/medio.png)"});
+    } 
+  }
 
 }])
    

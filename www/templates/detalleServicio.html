@@ -8,22 +8,22 @@
  
          <div id="contenedor">
             <leaflet data-tap-disabled="true"  width="100%" height="300px" center="center" defaults="defaults" markers="markers" paths="paths" ng-show="botonBuscarRuta" ></leaflet>
-            <img src='{{imagenServicio}}' ng-show="botonMostarImagen" width="90%" height="300px" style="display: block; margin-left: auto; margin-right: auto;" id="contenedorImagen">
+            <img src='{{imagenServicio}}' ng-show="botonMostarImagen" id="contenedorImagen">
             <div id="panelNotificacion" ng-show="panelNotificacionActivado">
-                <div id="notificacionVacio">Vacio</div>
-                <div id="notificacionMedio">Medio</div>
-                <div id="notificacionLleno">Lleno</div>
-                  <form>
-                  <h4 id="textoComentario">Escribe un comentario (opcional)</h4>
+                <div id="notificacionVacio" ng-click="seleccionDisponibilidad('vacio')">Vacio</div>
+                <div id="notificacionMedio" ng-click="seleccionDisponibilidad('medio')">Medio</div>
+                <div id="notificacionLleno" ng-click="seleccionDisponibilidad('lleno')">Lleno</div>
+                  <form ng-show="notificacionSeleccionada">
+                  <h4 id="textoComentario" ng-show="notificacionSeleccionada">Escribe un comentario (opcional)</h4>
                   <input type="text" name="comentario" id="comentario">
                     </form>
                 <div id="cancelar" ng-click="cancelarPanelNotificacion()">Cancelar</div>
-                <div id="enviar">Enviar</div>
+                <div id="enviar" ng-click="enviarNotificacion()">Enviar</div>
             </div>
         </div>
         <div id="disponibilidadYNotificar">
             <h4>Disponibilidad</h4>
-            <div id="Notificar" ng-click="abrirPanelNotificacion()" ng-hide="panelNotificacionActivado">Notificar</div>
+            <div id="Notificar" ng-click="abrirPanelNotificacion()" ng-hide="panelNotificacionActivado" >Notificar</div>
             
         </div>
         <div id="myProgress">
@@ -32,7 +32,7 @@
     
             <h4 id="detalleServicio-heading3" style="color:#000000;">Comentarios</h4>
             <ion-item class="item-icon-left  " id="detalleServicio-list-item19">
-                <i class="icon ion-android-contact"></i>Comentaríóo 1
+                <i class="icon ion-android-contact"></i>Comentaríóo
                 <span class="item-note">Hace 2 minutos</span>
             </ion-item>
             <ion-item class="item-icon-left  " id="detalleServicio-list-item20">
