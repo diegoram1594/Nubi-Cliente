@@ -1,6 +1,6 @@
 <ion-view title={{nombreServicio}} id="page10">
     <ion-nav-buttons side="right">
-        <button ng-click="mostrarRuta()" class="button button-icon icon ion-android-map">Buscar Ruta</button>
+        <button ng-click="mostrarRuta()" class="button button-icon icon ion-android-map" ng-disabled="panelNotificacionActivado">{{botonRuta}}</button >
     </ion-nav-buttons>
 
     <ion-content padding="true" class="has-header">
@@ -8,21 +8,31 @@
  
          <div id="contenedor">
             <leaflet data-tap-disabled="true"  width="100%" height="300px" center="center" defaults="defaults" markers="markers" paths="paths" ng-show="botonBuscarRuta" ></leaflet>
-            <img src='{{imagenServicio}}' ng-hide="botonBuscarRuta" width="90%" height="auto" style="display: block; margin-left: auto; margin-right: auto;">
-            <div id="Notificar">Notificar</div>
+            <img src='{{imagenServicio}}' ng-show="botonMostarImagen" width="90%" height="300px" style="display: block; margin-left: auto; margin-right: auto;" id="contenedorImagen">
+            <div id="panelNotificacion" ng-show="panelNotificacionActivado">
+                <div id="notificacionVacio">Vacio</div>
+                <div id="notificacionMedio">Medio</div>
+                <div id="notificacionLleno">Lleno</div>
+                  <form>
+                  <h4 id="textoComentario">Escribe un comentario (opcional)</h4>
+                  <input type="text" name="comentario" id="comentario">
+                    </form>
+                <div id="cancelar" ng-click="cancelarPanelNotificacion()">Cancelar</div>
+                <div id="enviar">Enviar</div>
+            </div>
         </div>
-     
-        <h4 id="detalleServicio-heading7" style="color:#000000;">Disponibilidad</h4>
-        <form id="detalleServicio-form6" class="list ">
+        <div id="disponibilidadYNotificar">
+            <h4>Disponibilidad</h4>
+            <div id="Notificar" ng-click="abrirPanelNotificacion()" ng-hide="panelNotificacionActivado">Notificar</div>
+            
+        </div>
         <div id="myProgress">
             <div id="myBar"></div>
-        </div>
-
-           
+        </div>        
     
             <h4 id="detalleServicio-heading3" style="color:#000000;">Comentarios</h4>
             <ion-item class="item-icon-left  " id="detalleServicio-list-item19">
-                <i class="icon ion-android-contact"></i>Comentario 1
+                <i class="icon ion-android-contact"></i>Comentaríóo 1
                 <span class="item-note">Hace 2 minutos</span>
             </ion-item>
             <ion-item class="item-icon-left  " id="detalleServicio-list-item20">
@@ -33,8 +43,6 @@
                 <i class="icon ion-android-contact"></i>Comentario 3
                 <span class="item-note">Hace 15 minutos</span>
             </ion-item>
-
-        </form>
     </ion-content>
 </ion-view>
 

@@ -14,13 +14,13 @@ function ($scope, $stateParams) {
   $scope.valorRango=300;
   respuestas=[];
   $scope.esconderRegresar=true;
-  numPregunta=1;
+  $scope.numPregunta=1;
   preguntas1=[{opcion:'hola',color:'#0092D7',fondo:''},{opcion:'Tu',color:'#0092D7',fondo:''},{opcion:'Como',color:'#0092D7',fondo:''},{opcion:'Estas',color:'#0092D7',fondo:''}]
   preguntas2=[{opcion:'Otra',color:'#0092D7',fondo:''},{opcion:'Pregunta',color:'#0092D7',fondo:''},{opcion:'Por',color:'#0092D7',fondo:''},{opcion:'Aca',color:'#0092D7',fondo:''}]
   preguntas3=[{opcion:'Esta',color:'#0092D7',fondo:''},{opcion:'Es',color:'#0092D7',fondo:''},{opcion:'La',color:'#0092D7',fondo:''},{opcion:'Tercera',color:'#0092D7',fondo:''}]
  $scope.respuestasCargadas = preguntas1;
 $scope.siguientePregunta= function(respuesta) {
-  respuestas[numPregunta-1]=respuesta;
+  respuestas[$scope.numPregunta-1]=respuesta;
   for (var i = 0; i < $scope.respuestasCargadas.length; i++) {
     if (respuesta==$scope.respuestasCargadas[i].opcion) {
       $scope.respuestasCargadas[i].color='white';
@@ -31,30 +31,30 @@ $scope.siguientePregunta= function(respuesta) {
       $scope.respuestasCargadas[i].fondo='';
     }
   }
-  if (numPregunta<4) {
-      numPregunta+=1;
+  if ($scope.numPregunta<4) {
+      $scope.numPregunta+=1;
   }
   else{
     alert (respuestas);
   }
   $scope.esconderRegresar=false;
-  if (numPregunta==2){
+  if ($scope.numPregunta==2){
     $scope.respuestasCargadas = preguntas2;
     }
-  if (numPregunta==3) {
+  if ($scope.numPregunta==3) {
     $scope.respuestasCargadas = preguntas3;
   }
 }
   $scope.preguntaAnterior=function(){
-    numPregunta-=1;
-    if (numPregunta==1) {
+    $scope.numPregunta-=1;
+    if ($scope.numPregunta==1) {
       $scope.esconderRegresar=true;
       $scope.respuestasCargadas = preguntas1;
     }
-    if (numPregunta==2){
+    if ($scope.numPregunta==2){
     $scope.respuestasCargadas = preguntas2;
     }
-    if (numPregunta==3) {
+    if ($scope.numPregunta==3) {
     $scope.respuestasCargadas = preguntas3;
     }
 
@@ -78,6 +78,7 @@ function ($scope, $stateParams,$cordovaGeolocation,$http,$ionicLoading,$ionicPop
 $scope.botonRuta="Buscar Ruta";
 $scope.imagenServicio=$stateParams.imagen;
 $scope.nombreServicio=$stateParams.nombre;
+$scope.botonMostarImagen=true;
 
 
 var aleatorio = Math.round(Math.random()*100);
@@ -107,7 +108,7 @@ var elem = document.getElementById("myBar");
   }
 
 
- 
+ /*
 $http.get('http://192.168.43.117:8080/REST_war_exploded/prueba/hola')
             .success(function (data) {
               var felipeJson=String(data.cad);
@@ -117,7 +118,7 @@ $http.get('http://192.168.43.117:8080/REST_war_exploded/prueba/hola')
                             });  
                 
             });
-
+*/
 
 //
 
@@ -219,6 +220,7 @@ $scope.mostrarRuta= function() {
   if ($scope.botonRuta=="Buscar Ruta") {
     $scope.botonRuta="Quitar Ruta";
     $scope.botonBuscarRuta=true;
+    $scope.botonMostarImagen=false;
     if ($scope.caminoCargado!=true) {
       $ionicLoading.show();
     }
@@ -226,9 +228,24 @@ $scope.mostrarRuta= function() {
   }
   else{
     $scope.botonRuta="Buscar Ruta";
-    $scope.botonBuscarRuta=false;    
+    $scope.botonBuscarRuta=false; 
+    $scope.botonMostarImagen=true;   
     
   }
+}
+
+$scope.abrirPanelNotificacion=function(){
+  $scope.panelNotificacionActivado=true;
+  $scope.botonBuscarRuta=false; 
+    $scope.botonMostarImagen=true;
+  $("#contenedorImagen").css({"opacity": "0.3"});
+
+}
+$scope.cancelarPanelNotificacion=function(){
+  $scope.panelNotificacionActivado=false;
+  $scope.botonBuscarRuta=false; 
+    $scope.botonMostarImagen=true;
+  $("#contenedorImagen").css({"opacity": "1"});
 }
 
 }])
