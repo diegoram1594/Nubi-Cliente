@@ -339,6 +339,18 @@ body {
     background-position: center;
     background-size: 30px 30px;
 }
+#favorito{
+  width:60px;
+    height:60px; 
+    background-image: url(img/estrellaNo.png);
+  background-repeat: no-repeat;
+    background-position: center;
+    background-size: 60px 60px;
+    position: fixed;
+    top: 20px;
+    right: 25px;
+
+}
 .textoListaServicios{
   text-align: right;
   color: grey;

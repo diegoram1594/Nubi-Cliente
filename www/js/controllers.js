@@ -9,8 +9,8 @@ function ($scope, $stateParams) {
 }])
 
 
-.controller('configuracionInicialCtrl', ['$scope', '$stateParams', 
-function ($scope, $stateParams) {
+.controller('configuracionInicialCtrl', ['$scope', '$stateParams','$state',
+function ($scope, $stateParams,$state) {
   $scope.valorRango=300;
   respuestas=[];
   $scope.esconderRegresar=true;
@@ -31,11 +31,11 @@ $scope.siguientePregunta= function(respuesta) {
       $scope.respuestasCargadas[i].fondo='';
     }
   }
-  if ($scope.numPregunta<4) {
+  if ($scope.numPregunta<3) {
       $scope.numPregunta+=1;
   }
   else{
-    alert (respuestas);
+    $state.go('menu.home');
   }
   $scope.esconderRegresar=false;
   if ($scope.numPregunta==2){
@@ -310,6 +310,26 @@ $scope.seleccionDisponibilidad=function(eleccion){
       $("#notificacionMedio").css({"background-image": "url(css/img/medio.png)"});
     } 
   }
+lugarFavorito=false;
+$scope.cambiarFavorito=function(){
+  if (lugarFavorito==false) {
+    var alertPopup = $ionicPopup.alert({
+       title: 'Favorito ',
+       template: 'Lugar agregado a Favoritos'
+     });
+    $("#favorito").css({"background-image": "url(css/img/estrellaSi.png)"});
+    lugarFavorito=true;
+  }
+  else{
+    var alertPopup = $ionicPopup.alert({
+       title: 'Favorito ',
+       template: 'Lugar elminado de Favoritos'
+     });
+    $("#favorito").css({"background-image": "url(css/img/estrellaNo.png)"});
+    lugarFavorito=false;
+
+  }
+}
 
 }])
    
@@ -495,6 +515,30 @@ function ($scope, $stateParams) {
 
 
 }])
+
+.controller('registroCtrl', ['$scope', '$stateParams','$ionicHistory','$state',
+function ($scope, $stateParams,$ionicHistory,$state ) {
+
+$scope.registro=function(){
+  $ionicHistory.nextViewOptions({
+    disableBack: true
+  });
+  $state.go('configuracionInicial');
+}
+
+}])
+
+.controller('loginCtrl', ['$scope', '$stateParams','$ionicHistory','$state',
+function ($scope, $stateParams,$ionicHistory,$state ) {
+
+$scope.login=function(){
+  $ionicHistory.nextViewOptions({
+    disableBack: true
+  });
+  $state.go('menu.home');
+}
+
+}])
    
 .controller('grupoCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
@@ -577,9 +621,7 @@ angular.extend($scope, {
 
 }])
    
-.controller('crearAlertaGrupoCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
+.controller('crearAlertaGrupoCtrl', ['$scope', '$stateParams',
 function ($scope, $stateParams) {
 
 
@@ -597,9 +639,6 @@ function ($scope, $stateParams) {
         longitude_change,
         factor = Math.pow(10, precision || 6);
 
-    // Coordinates have variable length when encoded, so just keep
-    // track of whether we've hit the end of the string. In each
-    // loop iteration, a single coordinate is decoded.
     while (index < str.length) {
 
         // Reset shift, result, and byte

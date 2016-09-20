@@ -9,6 +9,7 @@
          <div id="contenedor">
             <leaflet data-tap-disabled="true"  width="100%" height="300px" center="center" defaults="defaults" markers="markers" paths="paths" ng-show="botonBuscarRuta" ></leaflet>
             <img src='{{imagenServicio}}' ng-show="botonMostarImagen" id="contenedorImagen">
+            <div id="favorito" ng-hide="panelNotificacionActivado" ng-click="cambiarFavorito()"></div>
             <div id="panelNotificacion" ng-show="panelNotificacionActivado">
                 <div id="notificacionVacio" ng-click="seleccionDisponibilidad('vacio')">Vacio</div>
                 <div id="notificacionMedio" ng-click="seleccionDisponibilidad('medio')">Medio</div>
