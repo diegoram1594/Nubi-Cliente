@@ -4,12 +4,11 @@
         <leaflet data-tap-disabled="true"  width="100%" height="100%" center="center" defaults="defaults" markers="markers" paths="paths"></leaflet>
         
         <div  id="botonRestaurantes" ng-click="mostrarEnMapa('restaurantes')"></div>
-        <div  id="botonFotocopia" ></div>
-        <div  id="botonEstudio" ></div>
-        <div  id="botonAmigo" ></div>
+        <div  id="botonFotocopia" ng-click="mostrarEnMapa('fotocopiadoras')"></div>
+        <div  id="botonEstudio" ng-click="mostrarEnMapa('sitiosEstudio')"></div>
 
         <div ng-click="mostrarServicios()" id="botonBusquedaHome"></div>
-        <div  id="verLista" ui-sref="menu.listaServicios({tipo:'restaurantes'})">   Ver Lista   </div>
+        <div  id="verLista" ng-click="irListaServicios()" >Ver Lista</div>
 
     </ion-pane>
 </ion-view>

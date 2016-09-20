@@ -65,9 +65,14 @@ $scope.siguientePregunta= function(respuesta) {
 .controller('listaServiciosCtrl', ['$scope', '$stateParams','ListaServicios',
 function ($scope, $stateParams,ListaServicios) {
   var tipo=$stateParams.tipo;
-
   if (tipo=="restaurantes") {
     var ubi=ListaServicios.restaurantes;
+  }
+  if (tipo=="fotocopiadoras") {
+    var ubi=ListaServicios.fotocopiadoras;
+  }
+  if (tipo=="sitiosEstudio") {
+    var ubi=ListaServicios.sitiosEstudio;
   }
 $scope.ubicacionesCargadas=ubi;
 
@@ -124,7 +129,9 @@ $http.get('http://192.168.43.117:8080/REST_war_exploded/prueba/hola')
 
   var caminoCodificado="";
 var caminos=[];
-var lista=ListaServicios.restaurantes;
+var listaRes=ListaServicios.restaurantes;
+var listaResFot=listaRes.concat(ListaServicios.fotocopiadoras);
+var lista=listaResFot.concat(ListaServicios.sitiosEstudio);
 var latFinal="";
 var lngFinal="";
 for (var i = 0; i<lista.length; i++) {
@@ -306,24 +313,36 @@ $scope.seleccionDisponibilidad=function(eleccion){
 
 }])
    
-.controller('homeCtrl', ['$scope','$cordovaGeolocation','$http','$window','ListaServicios',
-function ($scope,$cordovaGeolocation,$http,$window,ListaServicios) {
+.controller('homeCtrl', ['$scope','$cordovaGeolocation','$http','$window','$state','ListaServicios',
+function ($scope,$cordovaGeolocation,$http,$window,$state,ListaServicios) {
 $scope.mostrarUbicaciones=false;
+$scope.servicioActual="ninguno";
+
+var marcadoresIniciales=[];
+var aleatorio = Math.round(Math.random()*(ListaServicios.restaurantes.length-1));
+marcadoresIniciales.push(ListaServicios.restaurantes[aleatorio]);
+var aleatorio = Math.round(Math.random()*(ListaServicios.fotocopiadoras.length-1));
+marcadoresIniciales.push(ListaServicios.fotocopiadoras[aleatorio]);
+var aleatorio = Math.round(Math.random()*(ListaServicios.sitiosEstudio.length-1));
+marcadoresIniciales.push(ListaServicios.sitiosEstudio[aleatorio]);
+
+
+
+
+
 $scope.mostrarServicios= function(){
-if ($scope.servicioActual!="restaurantes") {
+if ($scope.servicioActual!="restaurantes" && $scope.servicioActual!='fotocopiadoras' && $scope.servicioActual!='sitiosEstudio') {
   if ($scope.mostrarUbicaciones==true  ) {
     $scope.mostrarUbicaciones=false;
     $("#botonBusquedaHome").css({"background-image": "url(css/img/busqueda.png)","background-size": "30px 30px"});
      $("#botonEstudio").animate({right: "-60px"});
     $("#botonFotocopia").animate({right: "-100px"});
     $("#botonRestaurantes").animate({right: "-150px"});
-    $("#botonAmigo").animate({right: "-200px"});
     
   }
   else{
     $scope.mostrarUbicaciones=true;
     $("#botonBusquedaHome").css({"background-image": "url(css/img/home.png)","background-size": "80px 80px"});
-    $("#botonAmigo").animate({right: "30px"});
     $("#botonEstudio").animate({right: "30px"});
     $("#botonFotocopia").animate({right: "30px"});
     $("#botonRestaurantes").animate({right: "30px"});
@@ -333,19 +352,27 @@ if ($scope.servicioActual!="restaurantes") {
  else{
   $scope.servicioActual="ninguno";
   $("#botonBusquedaHome").css({"background-image": "url(css/img/home.png)","background-size": "80px 80px"});
-  $("#botonAmigo").animate({right: "30px"});
   $("#botonEstudio").animate({right: "30px"});
   $("#botonFotocopia").animate({right: "30px"});
   $("#botonRestaurantes").animate({right: "30px"});
   $("#verLista").animate({bottom : "-45px"});
-  $scope.markers={}
+  $scope.markers=marcadoresIniciales;
   
-
  }
 };
 
 
-
+$scope.irListaServicios=function(){
+  $scope.mostrarUbicaciones=false;
+    $("#botonBusquedaHome").css({"background-image": "url(css/img/busqueda.png)","background-size": "30px 30px"});
+    $("#botonEstudio").css({right: "-60px"});
+    $("#botonFotocopia").css({right: "-100px"});
+    $("#botonRestaurantes").css({right: "-150px"});
+    $("#verLista").css({bottom : "-45px"});
+  $scope.markers=marcadoresIniciales;
+  $state.go('menu.listaServicios',{'tipo':$scope.servicioActual});
+  $scope.servicioActual='ninguno';
+}
 
 $scope.mostrarEnMapa=function(tipoServicio){
 
@@ -355,11 +382,23 @@ $scope.mostrarEnMapa=function(tipoServicio){
     $scope.servicioActual='restaurantes';
     var locations=ListaServicios.restaurantes;
     $scope.markers=locations;
-    $("#botonAmigo").animate({right: "-100px"});
     $("#botonEstudio").animate({right: "-100px"});
     $("#botonFotocopia").animate({right: "-100px"});
-
-}
+  }
+  if (tipoServicio=='fotocopiadoras') { 
+    $scope.servicioActual='fotocopiadoras';
+    var locations=ListaServicios.fotocopiadoras;
+    $scope.markers=locations;
+    $("#botonEstudio").animate({right: "-100px"});
+    $("#botonRestaurantes").animate({right: "-100px"});
+  }
+  if (tipoServicio=='sitiosEstudio') { 
+    $scope.servicioActual='sitiosEstudio';
+    var locations=ListaServicios.sitiosEstudio;
+    $scope.markers=locations;
+    $("#botonFotocopia").animate({right: "-100px"});
+    $("#botonRestaurantes").animate({right: "-100px"});
+  }
  
 }
 
@@ -411,7 +450,8 @@ angular.extend($scope, {
               enable: ['context'],
               logic: 'emit'
             }
-          }
+          },
+        markers: marcadoresIniciales
     
        
             });
