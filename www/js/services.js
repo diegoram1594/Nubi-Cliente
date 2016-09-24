@@ -132,9 +132,9 @@ angular.module('app.services', [])
 
     },
     {
-      message:"Salas Estudio Baron",
-      lat:4.62660,
-      lng: -74.06380,
+      message:"Ing 4 piso",
+      lat:4.62692,
+      lng: -74.06398,
       imagen: "img/italiano.JPG",
       icon:{
             iconUrl: 'img/marcadorSitiosEstudio.png',
@@ -143,10 +143,10 @@ angular.module('app.services', [])
             popupAnchor:  [1, 0] 
         }
     },
-    {
-      message:"Edificio 54",
-      lat:4.63024,
-      lng:  -74.06341,
+    { 
+      message:"Baron Salas Estudio",
+      lat:4.62665,
+      lng:  -74.06379,
       imagen: "img/7IHkbLjlTACS087GTxG5_article.jpg",
       icon:{
             iconUrl: 'img/marcadorSitiosEstudio.png',
@@ -154,20 +154,7 @@ angular.module('app.services', [])
             iconAnchor:   [19, 47], 
             popupAnchor:  [1, 0] 
         }
-    },
-    {
-      message:"Ultimo piso Ingenieria",
-      lat:4.62695,
-      lng: -74.06401,
-      imagen: "img/italiano.JPG",
-      icon:{
-            iconUrl: 'img/marcadorSitiosEstudio.png',
-            iconSize:     [36, 47], 
-            iconAnchor:   [19, 47], 
-            popupAnchor:  [1, 0] 
-        }
-    }
- 
+    }, 
   ];
 
 

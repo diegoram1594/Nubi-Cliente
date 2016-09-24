@@ -18,16 +18,20 @@ body {
 .tabs.border-top {
   border-top: 1px solid #ddd !important;
 }
-#botonAmigo{
-	width:55px;
-    height: 55px;
+#botonNotificaciones{
+	  width:60px;
+    height: 60px;
     border-radius:100%;
-    background-color:red;   
+    background-color:#5690f2;   
     background-size: 30px 30px;
- 	position: absolute;
- 	right: -100px;
-    bottom : 385px;
+ 	  position: absolute;
+    left: 20px;
+    bottom : 55px;
     box-shadow: 4px 5px 5px grey;
+    background-image: url(img/notificacion.png);
+      background-repeat: no-repeat;
+    background-position: center;
+    background-size: 30px 30px;
 
 }
 #botonRestaurantes{

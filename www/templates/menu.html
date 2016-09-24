@@ -15,13 +15,15 @@
         <ion-content padding="false">
             <ion-list id="menu-list5">
                 <ion-item class="item-avatar positive  " id="menu-list-item1">
-                    <h2positive>NombreUsuario</h2positive>
+                    <img src="css/img/userIcon.png">
+                    <h2positive>{{nombreUsuario}}</h2positive>
                 </ion-item>
                 <ion-item id="menu-list-item12" ui-sref="menu.home" menu-close="">Home</ion-item>
                 <ion-item id="menu-list-item10" ui-sref="menu.listaDeAmigos" menu-close="">Amigos</ion-item>
                 <ion-item id="menu-list-item2" ui-sref="menu.listaGrupos" menu-close="">Grupos</ion-item>
                 <ion-item id="menu-list-item21" ui-sref="menu.configuracion" menu-close="">Configuración</ion-item>
                 <ion-item id="menu-list-item22">Ayuda</ion-item>
+                <ion-item id="menu-list-item22" ng-click="cerrarSesion()">Cerrar Sesion</ion-item>
             </ion-list>
         </ion-content>
     </ion-side-menu>

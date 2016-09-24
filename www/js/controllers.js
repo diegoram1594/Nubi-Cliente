@@ -456,7 +456,7 @@ $scope.localizarGPS = function(){
 angular.extend($scope, {
         defaults: {
             tileLayer:'http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png' ,
-            maxZoom: 17,
+            maxZoom: 18,
             minZoom: 17,
             zoomControl: false,
           },
@@ -469,6 +469,16 @@ angular.extend($scope, {
             map: {
               enable: ['context'],
               logic: 'emit'
+            }
+          },
+          maxbounds:{
+            southWest: {
+              lat:4.625201476849557,
+              lng: -74.0658438205719
+            },
+            northEast: {
+              lat:4.632687165640622,
+              lng:-74.06105875968932
             }
           },
         markers: marcadoresIniciales
@@ -531,7 +541,12 @@ $scope.registro=function(){
 .controller('loginCtrl', ['$scope', '$stateParams','$ionicHistory','$state',
 function ($scope, $stateParams,$ionicHistory,$state ) {
 
+
+if (localStorage.getItem("usuario")!=null) {
+  $state.go('menu.home');
+}
 $scope.login=function(){
+  localStorage.setItem("usuario",document.getElementById("usuario").value);
   $ionicHistory.nextViewOptions({
     disableBack: true
   });
@@ -547,6 +562,23 @@ function ($scope, $stateParams) {
 
 
 }])
+
+.controller('menuCtrl', ['$scope', '$stateParams','$ionicHistory','$state', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+// You can include any angular dependencies as parameters for this function
+// TIP: Access Route Parameters for your page via $stateParams.parameterName
+function ($scope, $stateParams,$ionicHistory,$state) {
+$scope.nombreUsuario=localStorage.getItem("usuario");
+$scope.cerrarSesion=function(){
+  localStorage.clear();
+    $ionicHistory.nextViewOptions({
+    disableBack: true
+  });
+  $state.go('login');
+}
+
+
+}])
+
 
 .controller('buscarRutaCtrl', ['$scope', '$stateParams', '$http','$cordovaGeolocation','ListaServicios',
 function ($scope, $stateParams,$http,$cordovaGeolocation,ListaServicios) {
