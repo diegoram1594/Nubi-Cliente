@@ -9,18 +9,53 @@ function ($scope, $stateParams) {
 }])
 
 
-.controller('configuracionInicialCtrl', ['$scope', '$stateParams','$state',
-function ($scope, $stateParams,$state) {
-  $scope.valorRango=300;
+.controller('configuracionInicialCtrl', ['$scope', '$stateParams','$state','$http','$ionicLoading','$ionicPopup','ipConf',
+function ($scope, $stateParams,$state,$http,$ionicLoading,$ionicPopup,ipConf) {
+  
+  $scope.opcionNumerico=false;
   respuestas=[];
   $scope.esconderRegresar=true;
   $scope.numPregunta=1;
-  preguntas1=[{opcion:'hola',color:'#0092D7',fondo:''},{opcion:'Tu',color:'#0092D7',fondo:''},{opcion:'Como',color:'#0092D7',fondo:''},{opcion:'Estas',color:'#0092D7',fondo:''}]
-  preguntas2=[{opcion:'Otra',color:'#0092D7',fondo:''},{opcion:'Pregunta',color:'#0092D7',fondo:''},{opcion:'Por',color:'#0092D7',fondo:''},{opcion:'Aca',color:'#0092D7',fondo:''}]
-  preguntas3=[{opcion:'Esta',color:'#0092D7',fondo:''},{opcion:'Es',color:'#0092D7',fondo:''},{opcion:'La',color:'#0092D7',fondo:''},{opcion:'Tercera',color:'#0092D7',fondo:''}]
- $scope.respuestasCargadas = preguntas1;
+  $scope.valorRango=400;
+  var enunciados=[
+  {pregunta:'Que distancia deseas caminar desde tu localización hasta tu lugar de interés?'},
+  {pregunta:"En caso de no encontrar un sitio en tu distancia elegida ¿Cuánto estarías dispuesta a caminar de más?"},
+  {pregunta:"Tiempo máximo de espera en algun sitio"},
+  {pregunta:"Tiempo mínimo de espera en algun sitio"},
+  {pregunta:"En cuanto a la ocupación de un lugar prefieres que el sitio este ..."},
+//  {pregunta:"¿Que prefieres ruido.."},
+  {pregunta:"Cuando buscas un sitio de estudio prefieres un lugar con tolerancia a ruido ..."},
+  {pregunta:"Para estudiar buscas un espacio ..."},
+  {pregunta:"Prefieres un sitio de fotocopiado ..."},
+  {pregunta:"¿Permites que NUBI de tu localización a tus amigos y contactos?"},
+  {pregunta:"¿Presenta alguna condición física que dificulte su movilidad en el campus?"}];
+  preguntas1=[{opcion:'Poco',color:'#0092D7',fondo:''},{opcion:'Medio',color:'#0092D7',fondo:''},{opcion:'Moderado',color:'#0092D7',fondo:''},{opcion:'Mucho',color:'#0092D7',fondo:''},{opcion:'Sin Limite',color:'#0092D7',fondo:''}];
+  preguntas2=[{opcion:'numero',inicial:'25',min:'0',max:'50',medida:'metros'}];
+  preguntas3=[{opcion:'numero',inicial:'13',min:'11',max:'15',medida:'minutos'}];
+  preguntas4=[{opcion:'numero',inicial:'5',min:'1',max:'10',medida:'minutos'}];
+  preguntas5=[{opcion:'Libre',color:'#0092D7',fondo:''},{opcion:'Medio',color:'#0092D7',fondo:''},{opcion:'Cualquiera',color:'#0092D7',fondo:''}];
+  preguntas6=[{opcion:'Sin ruido',color:'#0092D7',fondo:''},{opcion:'Medio',color:'#0092D7',fondo:''},{opcion:'Alto',color:'#0092D7',fondo:''}];
+//  preguntas7=[{opcion:'Bajo',color:'#0092D7',fondo:''},{opcion:'Medio',color:'#0092D7',fondo:''},{opcion:'Ato',color:'#0092D7',fondo:''}];
+  preguntas7=[{opcion:'Abierto',color:'#0092D7',fondo:''},{opcion:'Cerrado',color:'#0092D7',fondo:''},{opcion:'Cualquiera',color:'#0092D7',fondo:''}];
+  preguntas8=[{opcion:'Autoservicio',color:'#0092D7',fondo:''},{opcion:'Punto de Atención',color:'#0092D7',fondo:''}];
+  preguntas9=[{opcion:'Si',color:'#0092D7',fondo:''},{opcion:'No',color:'#0092D7',fondo:''}];
+  preguntas10=[{opcion:'No',color:'#0092D7',fondo:''},{opcion:'Leve',color:'#0092D7',fondo:''},{opcion:'Moderada',color:'#0092D7',fondo:''}];
+  preguntas=[preguntas1,preguntas2,preguntas3,preguntas4,preguntas5,preguntas6,preguntas7,preguntas8,preguntas9,preguntas10];
+ $scope.respuestasCargadas = preguntas[0];
+ $scope.enunciado=enunciados[$scope.numPregunta-1].pregunta;
+ $scope.maximo=preguntas[0][0].max;
+ $scope.minimo=preguntas[0][0].min;
+ $scope.medida=preguntas[0][0].medida;
+ document.getElementById("rangoNumerico").value=preguntas[0][0].inicial;
 $scope.siguientePregunta= function(respuesta) {
-  respuestas[$scope.numPregunta-1]=respuesta;
+  if(respuesta=="numero"){
+     respuestas[$scope.numPregunta-1]=document.getElementById("rangoNumerico").value;
+  }
+  else{
+     respuestas[$scope.numPregunta-1]=respuesta;
+  }
+  
+  console.log(respuestas[$scope.numPregunta-1]);
   for (var i = 0; i < $scope.respuestasCargadas.length; i++) {
     if (respuesta==$scope.respuestasCargadas[i].opcion) {
       $scope.respuestasCargadas[i].color='white';
@@ -31,68 +66,250 @@ $scope.siguientePregunta= function(respuesta) {
       $scope.respuestasCargadas[i].fondo='';
     }
   }
-  if ($scope.numPregunta<3) {
+  if ($scope.numPregunta<10) {
       $scope.numPregunta+=1;
+      $scope.enunciado=enunciados[$scope.numPregunta-1].pregunta;
+
   }
   else{
-    $state.go('menu.home');
+    console.log(respuestas);
+    var ip=ipConf;
+    $ionicLoading.show();
+    $http.get(ip+'/agregar-preferencias?usuario='+localStorage.getItem("usuario")+'&distancia='+respuestas[0]+'&DistTolerancia='+respuestas[1]+'&disponibilidad='+respuestas[4]+'&tiempoMin='+respuestas[2]+'&tiempoMax='+respuestas[3]+'&tolerancia='+respuestas[5]+'&tipoEspacio='+respuestas[6]+'&fotocopiadora='+respuestas[7])
+              .success(function (data) {
+
+                valorPrivacidad="";
+                if (respuestas[8]=="Si") {
+                  valorPrivacidad=true;
+                }
+                else{
+                  valorPrivacidad=false;
+                }
+
+                $http.get(ip+'/agregar-restricciones?usuario='+localStorage.getItem("usuario")+'&privacidad='+valorPrivacidad+"&movilidad="+respuestas[9])
+              .success(function (data) {
+                $ionicLoading.hide();
+                $state.go('menu.home');
+                console.log(data)
+                
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+                
+                
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+    
   }
   $scope.esconderRegresar=false;
-  if ($scope.numPregunta==2){
-    $scope.respuestasCargadas = preguntas2;
-    }
-  if ($scope.numPregunta==3) {
-    $scope.respuestasCargadas = preguntas3;
+  if(preguntas[$scope.numPregunta-1][0].opcion=='numero'){
+     $scope.opcionNumerico=true;
   }
+  else{
+     $scope.opcionNumerico=false;
+  }
+  $scope.respuestasCargadas = preguntas[$scope.numPregunta-1];
+  $scope.maximo=preguntas[$scope.numPregunta-1][0].max;
+ $scope.minimo=preguntas[$scope.numPregunta-1][0].min;
+ $scope.medida=preguntas[$scope.numPregunta-1][0].medida;
+ document.getElementById("rangoNumerico").value=preguntas[$scope.numPregunta-1][0].inicial;
+
+
 }
   $scope.preguntaAnterior=function(){
     $scope.numPregunta-=1;
+    $scope.enunciado=enunciados[$scope.numPregunta-1].pregunta;
     if ($scope.numPregunta==1) {
       $scope.esconderRegresar=true;
       $scope.respuestasCargadas = preguntas1;
     }
-    if ($scope.numPregunta==2){
-    $scope.respuestasCargadas = preguntas2;
-    }
-    if ($scope.numPregunta==3) {
-    $scope.respuestasCargadas = preguntas3;
-    }
+    if(preguntas[$scope.numPregunta-1][0].opcion=='numero'){
+     $scope.opcionNumerico=true;
+  }
+  else{
+     $scope.opcionNumerico=false;
+  }
+    $scope.respuestasCargadas = preguntas[$scope.numPregunta-1];
+    $scope.maximo=preguntas[$scope.numPregunta-1][0].max;
+    $scope.minimo=preguntas[$scope.numPregunta-1][0].min;
+    $scope.medida=preguntas[$scope.numPregunta-1][0].medida;
+    document.getElementById("rangoNumerico").value=preguntas[$scope.numPregunta-1][0].inicial;
+   
+
+
+    
 
   }
-
 }])
    
-.controller('listaServiciosCtrl', ['$scope', '$stateParams','ListaServicios',
-function ($scope, $stateParams,ListaServicios) {
+.controller('listaServiciosCtrl', ['$scope', '$stateParams','$cordovaGeolocation','$http','$ionicLoading','$ionicPopup','ListaServicios','ipConf',
+function ($scope, $stateParams,$cordovaGeolocation,$http,$ionicLoading,$ionicPopup,ListaServicios,ipConf) {
   var tipo=$stateParams.tipo;
-  if (tipo=="restaurantes") {
-    var ubi=ListaServicios.restaurantes;
-  }
-  if (tipo=="fotocopiadoras") {
-    var ubi=ListaServicios.fotocopiadoras;
-  }
-  if (tipo=="sitiosEstudio") {
-    var ubi=ListaServicios.sitiosEstudio;
-  }
-$scope.ubicacionesCargadas=ubi;
+  var ip=ipConf;
+
+
+$ionicLoading.show();
+$cordovaGeolocation
+          .getCurrentPosition()
+          .then(function (position) {
+
+            $scope.ubicacionesCargadas=[];
+            if (tipo=="sitiosEstudio") {
+            $http.get(ip+'/filtrado-sitiosestudio?usuario='+localStorage.getItem("usuario")+'&latitud='+position.coords.latitude+'&longitud='+position.coords.longitude)
+              .success(function (data) {
+                
+                $ionicLoading.hide();
+                for (var i =0; i < data.length ; i++) {
+
+                  
+                    for (var j = 0; j < ListaServicios.sitiosEstudio.length; j++) {
+                      if (data[i].sitio.nombre==ListaServicios.sitiosEstudio[j].message) {
+                        ListaServicios.sitiosEstudio[j].disponibilidad=disponibilidadAPalabra(data[i].sitio.estado.disponibilidad);
+                        ListaServicios.sitiosEstudio[j].disponibilidadNumerico=data[i].sitio.estado.disponibilidad*100;
+                        ListaServicios.sitiosEstudio[j].puntaje=data[i].puntaje;
+                        ListaServicios.sitiosEstudio[j].distancia=data[i].distancia;   
+                        $scope.ubicacionesCargadas.push(ListaServicios.sitiosEstudio[j]);
+                      }
+                    }
+                  }
+                }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+              }
+              if (tipo=="restaurantes") {
+            $http.get(ip+'/filtrado-restaurante?usuario='+localStorage.getItem("usuario")+'&latitud='+position.coords.latitude+'&longitud='+position.coords.longitude)
+              .success(function (data) {
+                
+                $ionicLoading.hide();
+                for (var i =0; i < data.length ; i++) {
+
+                  
+                    for (var j = 0; j < ListaServicios.restaurantes.length; j++) {
+                      if (data[i].restaurante.nombre==ListaServicios.restaurantes[j].message) {
+                        ListaServicios.restaurantes[j].disponibilidad=disponibilidadAPalabra(data[i].restaurante.estado.disponibilidad);
+                        ListaServicios.restaurantes[j].disponibilidadNumerico=data[i].restaurante.estado.disponibilidad*100;
+                        ListaServicios.restaurantes[j].puntaje=data[i].puntaje;
+                        ListaServicios.restaurantes[j].distancia=data[i].distancia;
+                        $scope.ubicacionesCargadas.push(ListaServicios.restaurantes[j]);
+                      }
+                    }
+                  }
+                }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+              }
+
+               if ( tipo=="fotocopiadoras") {
+            $http.get(ip+'/filtrado-fotocopiadora?usuario='+localStorage.getItem("usuario")+'&latitud='+position.coords.latitude+'&longitud='+position.coords.longitude)
+              .success(function (data) {
+                
+                $ionicLoading.hide();
+                for (var i =0; i < data.length ; i++) {
+
+                  for (var j = 0; j < ListaServicios.fotocopiadoras.length; j++) {
+                      if (data[i].fotocopiadora.nombre==ListaServicios.fotocopiadoras[j].message) {
+                        console.log(data[i]);
+                        ListaServicios.fotocopiadoras[j].disponibilidad=disponibilidadAPalabra(data[i].fotocopiadora.estado.disponibilidad);
+                        ListaServicios.fotocopiadoras[j].disponibilidadNumerico=data[i].fotocopiadora.estado.disponibilidad*100;
+                        ListaServicios.fotocopiadoras[j].puntaje=data[i].puntaje;
+                        ListaServicios.fotocopiadoras[j].distancia=data[i].distancia;
+                        $scope.ubicacionesCargadas.push(ListaServicios.fotocopiadoras[j]);
+                        
+                      }
+                    }
+                  }
+                }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+              }
+
+          }, function(err) {
+            // error
+            console.log("Location error!");
+            console.log(err);
+          });
 
 }])
    
-.controller('detalleServicioCtrl', ['$scope', '$stateParams','$cordovaGeolocation','$http','$ionicLoading','$ionicPopup','ListaServicios',
-function ($scope, $stateParams,$cordovaGeolocation,$http,$ionicLoading,$ionicPopup,ListaServicios) {
+.controller('detalleServicioCtrl', ['$scope', '$stateParams','$cordovaGeolocation','$http','$ionicLoading','$ionicPopup','ListaServicios','ipConf',
+function ($scope, $stateParams,$cordovaGeolocation,$http,$ionicLoading,$ionicPopup,ListaServicios,ipConf) {
 $scope.botonRuta="Buscar Ruta";
 $scope.imagenServicio=$stateParams.imagen;
 $scope.nombreServicio=$stateParams.nombre;
+var valorDisponibilidad=$stateParams.disponibilidad;
+$scope.comentariosCargados=[];
 $scope.botonMostarImagen=true;
+var ip=ipConf;
 
 
-var aleatorio = Math.round(Math.random()*100);
+$ionicLoading.show();
+            $http.get(ip+'/comentarios?sitio='+$stateParams.nombre)
+              .success(function (data) {
+                
+                for (var i = 0; i < data.length; i++) {
+                  var date = new Date();
+                  var diferencia = parseInt((date.getTime()-data[i].fechaPublicacion)/60000);
+                  var coment={comentario:data[i].comentario,estado:data[i].estado,tiempo:diferencia,id:data[i].id};
+                  $scope.comentariosCargados.push(coment);                               
+                } 
+                    $http.get(ip+'/verificar-favorito?usuario='+localStorage.getItem("usuario")+"&sitio="+$stateParams.nombre)
+                  .success(function (datos) {
+                    $ionicLoading.hide();
+                    
+                    if (datos.favorito==true) {
+                      $("#favorito").css({"background-image": "url(css/img/estrellaSi.png)"});
+                      $scope.lugarFavorito=true;
+                    }
+                    else{
+                      $("#favorito").css({"background-image": "url(css/img/estrellaNo.png)"});
+                      $scope.lugarFavorito=false;
+                    }
+                    
+                   }).error(function (datos, status, headers, config) {
+                   $ionicLoading.hide();
+                  var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });           
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+              
+
+
+
 var elem = document.getElementById("myBar");
   var width = 1;
   var id = setInterval(frame, 10);
   
   function frame() {
-    if (width >= aleatorio) {
+    if (width >= valorDisponibilidad) {
       clearInterval(id);
     } else {
       width++;
@@ -113,19 +330,6 @@ var elem = document.getElementById("myBar");
   }
 
 
- /*
-$http.get('http://192.168.43.117:8080/REST_war_exploded/prueba/hola')
-            .success(function (data) {
-              var felipeJson=String(data.cad);
-              var alertPopup = $ionicPopup.alert({
-                            title: 'Hola!!',
-                             template: felipeJson
-                            });  
-                
-            });
-*/
-
-//
 
   var caminoCodificado="";
 var caminos=[];
@@ -141,62 +345,6 @@ for (var i = 0; i<lista.length; i++) {
   }
 }
 
-$cordovaGeolocation
-          .getCurrentPosition()
-          .then(function (position) {
-            
-
-              $http.get('http://valhalla.mapzen.com/route?json={"locations":[{"lat":'+position.coords.latitude+',"lon":'+position.coords.longitude+'},{"lat":'+latFinal+',"lon":'+lngFinal+'}],"costing":"pedestrian","directions_options":{"units":"miles"}}&id=my_work_route&api_key=valhalla-UDVJPyv')
-            .success(function (data) {
-                
-                caminoCodificado=String(data.trip.legs[0].shape);
-      
-                var camino=decode(caminoCodificado,6);
-                
-          for (i = 0; i < camino.length; i++) { 
-              var caminito={ lat: camino[i][0], lng: camino[i][1] };
-              caminos.push(caminito);
-          }
-            });
-            
-        
-             $scope.markers= {gps:{
-              lat:position.coords.latitude,
-              lng:position.coords.longitude,
-              message:"Estás aquí",
-              icon:{
-                iconUrl: 'img/gpsSalida.png',
-                 iconSize:     [45, 45], 
-                 iconAnchor:   [22.35, 40.05]  
-              }
-              },
-            llegada:{
-              lat:latFinal,
-              lng:lngFinal,
-              message: $scope.nombreServicio,
-             icon:{
-                iconUrl: 'img/gpsLlegada.png',
-                 iconSize:     [45, 45], 
-                 iconAnchor:   [22.35, 40.05]  
-              }
-            }
-          };
-
-          $scope.center={
-            lat:position.coords.latitude,
-            lng:position.coords.longitude,
-            message:"Estás aquí",
-            zoom: 16
-          }
-          $scope.caminoCargado=true;
-          $ionicLoading.hide();
-
-          }, function(err) {
-            // error
-            console.log("Location error!");
-            console.log(err);
-
-          });
 
 
 
@@ -228,10 +376,66 @@ $scope.mostrarRuta= function() {
     $scope.botonRuta="Quitar Ruta";
     $scope.botonBuscarRuta=true;
     $scope.botonMostarImagen=false;
-    if ($scope.caminoCargado!=true) {
-      $ionicLoading.show();
-    }
-    
+    //$ionicLoading.show();
+          
+if (caminos.length==0) {
+$cordovaGeolocation.getCurrentPosition()
+          .then(function (position) {
+            
+
+              $http.get(ip+'/consultar-ruta?latitud=+'+position.coords.latitude+'&longitud='+position.coords.longitude+'&sitio='+$stateParams.nombre)
+            .success(function (data) {
+               // ionicLoading.hide();
+
+                caminoCodificado=String(data.shape);
+                var camino=decode(caminoCodificado,6);
+
+                
+          for (i = 0; i < camino.length; i++) { 
+              var caminito={ lat: camino[i][0], lng: camino[i][1] };
+              caminos.push(caminito);
+          }
+            });
+            
+        
+             $scope.markers= {gps:{
+              lat:position.coords.latitude,
+              lng:position.coords.longitude,
+              message:"Estás aquí",
+              icon:{
+                iconUrl: 'img/gpsSalida.png',
+                 iconSize:     [45, 45], 
+                 iconAnchor:   [22.35, 40.05]  
+              }
+              },
+            llegada:{
+              lat:latFinal,
+              lng:lngFinal,
+              message: $scope.nombreServicio,
+             icon:{
+                iconUrl: 'img/gpsLlegada.png',
+                 iconSize:     [45, 45], 
+                 iconAnchor:   [22.35, 40.05]  
+              }
+            }
+          };
+
+          $scope.center={
+            lat:latFinal,
+            lng:lngFinal,
+            zoom: 16
+          }
+
+          //$ionicLoading.hide();
+
+          }, function(err) {
+            // error
+            console.log("Location error!");
+            console.log(err);
+
+          });
+        }
+
   }
   else{
     $scope.botonRuta="Buscar Ruta";
@@ -266,20 +470,52 @@ $scope.cancelarPanelNotificacion=function(){
 notificacionEscogida="";
 $scope.enviarNotificacion=function(){
   if (notificacionEscogida!="") {
-   var alertPopup = $ionicPopup.alert({
-     title: 'Notificación Enviada '+notificacionEscogida,
-     template: 'Gracias por ayudarnos a mejorar :)'
-   });
-   $scope.panelNotificacionActivado=false;
-  $scope.botonBuscarRuta=false; 
-    $scope.botonMostarImagen=true;
-  $("#contenedorImagen").css({"opacity": "1"});
-  $scope.botonRuta=="Buscar Ruta"
-  $("#notificacionVacio").css({"background-image": "url(css/img/vacio.png)"});
-      $("#notificacionMedio").css({"background-image": "url(css/img/medio.png)"});
-      $("#notificacionLleno").css({"background-image": "url(css/img/lleno.png)"});
-      notificacionEscogida="";
-      $scope.notificacionSeleccionada=false;
+    $ionicLoading.show();
+    $http.get(ip+'/agregar-alerta?sitio='+$stateParams.nombre+'&comentario='+document.getElementById("comentario").value+'&estado='+notificacionEscogida)
+                  .success(function (datos) {
+
+                    var alertPopup = $ionicPopup.alert({
+                 title: 'Notificación Enviada '+notificacionEscogida,
+                 template: 'Gracias por ayudarnos a mejorar :)'
+               });
+               $scope.panelNotificacionActivado=false;
+              $scope.botonBuscarRuta=false; 
+                $scope.botonMostarImagen=true;
+              $("#contenedorImagen").css({"opacity": "1"});
+              $scope.botonRuta=="Buscar Ruta"
+              $("#notificacionVacio").css({"background-image": "url(css/img/vacio.png)"});
+                  $("#notificacionMedio").css({"background-image": "url(css/img/medio.png)"});
+                  $("#notificacionLleno").css({"background-image": "url(css/img/lleno.png)"});
+                  notificacionEscogida="";
+                  $scope.notificacionSeleccionada=false;
+
+                
+                $http.get(ip+'/comentarios?sitio='+$stateParams.nombre)
+              .success(function (data) {
+                $ionicLoading.hide();
+                $scope.comentariosCargados=[]; 
+                for (var i = 0; i < data.length; i++) {
+                  var date = new Date();
+                  var diferencia = parseInt((date.getTime()-data[i].fechaPublicacion)/60000);
+                  var coment={comentario:data[i].comentario,estado:data[i].estado,tiempo:diferencia,id:data[i].id};
+                  $scope.comentariosCargados.push(coment);                               
+                } 
+                           
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+                   }).error(function (datos, status, headers, config) {
+                   $ionicLoading.hide();
+                  var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              }); 
+   
   }
   else{
     var alertPopup = $ionicPopup.alert({
@@ -291,54 +527,125 @@ $scope.enviarNotificacion=function(){
 
 $scope.seleccionDisponibilidad=function(eleccion){
   $scope.notificacionSeleccionada=true;
-  if (eleccion=="vacio") {
-    notificacionEscogida="vacio";
+  if (eleccion=="Libre") {
+    notificacionEscogida="Libre";
       $("#notificacionVacio").css({"background-image": "url(css/img/vacioSeleccionado.png)"});
       $("#notificacionMedio").css({"background-image": "url(css/img/medio.png)"});
       $("#notificacionLleno").css({"background-image": "url(css/img/lleno.png)"});
     }
-  if (eleccion=="medio") {
-    notificacionEscogida="medio";
+  if (eleccion=="Medio") {
+    notificacionEscogida="Medio";
       $("#notificacionMedio").css({"background-image": "url(css/img/medioSeleccionado.png)"});
       $("#notificacionVacio").css({"background-image": "url(css/img/vacio.png)"});
       $("#notificacionLleno").css({"background-image": "url(css/img/lleno.png)"});
     }  
-  if (eleccion=="lleno") {
-    notificacionEscogida="lleno";
+  if (eleccion=="Lleno") {
+    notificacionEscogida="LLeno";
       $("#notificacionLleno").css({"background-image": "url(css/img/llenoSeleccionado.png)"});
       $("#notificacionVacio").css({"background-image": "url(css/img/vacio.png)"});
       $("#notificacionMedio").css({"background-image": "url(css/img/medio.png)"});
     } 
   }
-lugarFavorito=false;
+
 $scope.cambiarFavorito=function(){
-  if (lugarFavorito==false) {
-    var alertPopup = $ionicPopup.alert({
-       title: 'Favorito ',
-       template: 'Lugar agregado a Favoritos'
-     });
-    $("#favorito").css({"background-image": "url(css/img/estrellaSi.png)"});
-    lugarFavorito=true;
+  $ionicLoading.show();
+  if ($scope.lugarFavorito==false) {
+    $http.get(ip+'/agregar-favorito?usuario='+localStorage.getItem("usuario")+"&sitio="+$stateParams.nombre)
+                  .success(function (datos) {
+                        $ionicLoading.hide();                    
+                        var alertPopup = $ionicPopup.alert({
+                          title: 'Favorito ',
+                          template: 'Lugar agregado a Favoritos'
+                        });
+                        $("#favorito").css({"background-image": "url(css/img/estrellaSi.png)"});
+                        $scope.lugarFavorito.lugarFavorito=true;
+
+                   }).error(function (datos, status, headers, config) {
+                   $ionicLoading.hide();
+                  var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              }); 
+
+
   }
   else{
-    var alertPopup = $ionicPopup.alert({
-       title: 'Favorito ',
-       template: 'Lugar elminado de Favoritos'
-     });
-    $("#favorito").css({"background-image": "url(css/img/estrellaNo.png)"});
-    lugarFavorito=false;
+    $http.get(ip+'/agregar-favorito?usuario='+localStorage.getItem("usuario")+"&sitio="+$stateParams.nombre)
+                  .success(function (datos) {
+                        $ionicLoading.hide();                    
+                        var alertPopup = $ionicPopup.alert({
+                          title: 'Favorito ',
+                          template: 'Lugar eliminado de Favoritos'
+                        });
+                        $("#favorito").css({"background-image": "url(css/img/estrellaNo.png)"});
+                        $scope.lugarFavorito.lugarFavorito=false;
+
+                   }).error(function (datos, status, headers, config) {
+                   $ionicLoading.hide();
+                  var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              }); 
+
 
   }
 }
 
+$scope.like=function(id){
+  $ionicLoading.show();
+  $http.get(ip+'/retroalimentacion-alerta?sitio='+$scope.nombreServicio+"&id="+id+"&tipo="+"true")
+              .success(function (data) {
+                $ionicLoading.hide();
+                $scope.comentariosCargados=[];
+                for (var i = 0; i < data.length; i++) {
+                  var date = new Date();
+                  var diferencia = parseInt((date.getTime()-data[i].fechaPublicacion)/60000);
+                  var coment={comentario:data[i].comentario,estado:data[i].estado,tiempo:diferencia,id:data[i].id};
+                  $scope.comentariosCargados.push(coment);                  
+                }
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+}
+
+$scope.dislike=function(id){
+  $ionicLoading.show();
+    $http.get(ip+'/retroalimentacion-alerta?sitio='+$scope.nombreServicio+"&id="+id+"&tipo="+"false")
+              .success(function (data) {
+                $ionicLoading.hide();
+                 $scope.comentariosCargados=[];
+                for (var i = 0; i < data.length; i++) {
+                  var date = new Date();
+                  var diferencia = parseInt((date.getTime()-data[i].fechaPublicacion)/60000);
+                  var coment={comentario:data[i].comentario,estado:data[i].estado,tiempo:diferencia,id:data[i].id};
+                  $scope.comentariosCargados.push(coment);                  
+                }
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+}
+
 }])
    
-.controller('homeCtrl', ['$scope','$cordovaGeolocation','$http','$window','$state','ListaServicios',
-function ($scope,$cordovaGeolocation,$http,$window,$state,ListaServicios) {
+.controller('homeCtrl', ['$scope','$cordovaGeolocation','$http','$window','$state','$ionicLoading','$ionicPopup','ListaServicios','ipConf',
+function ($scope,$cordovaGeolocation,$http,$window,$state,$ionicLoading,$ionicPopup,ListaServicios,ipConf) {
 $scope.mostrarUbicaciones=false;
 $scope.servicioActual="ninguno";
+var ubicacion=null;
+var ip=ipConf;
 
 var marcadoresIniciales=[];
+/*
 var aleatorio = Math.round(Math.random()*(ListaServicios.restaurantes.length-1));
 marcadoresIniciales.push(ListaServicios.restaurantes[aleatorio]);
 var aleatorio = Math.round(Math.random()*(ListaServicios.fotocopiadoras.length-1));
@@ -346,7 +653,65 @@ marcadoresIniciales.push(ListaServicios.fotocopiadoras[aleatorio]);
 var aleatorio = Math.round(Math.random()*(ListaServicios.sitiosEstudio.length-1));
 marcadoresIniciales.push(ListaServicios.sitiosEstudio[aleatorio]);
 
+*/
+$ionicLoading.show();
+$cordovaGeolocation
+          .getCurrentPosition()
+          .then(function (position) {
 
+
+            $http.get(ip+'/servicios-login?usuario='+localStorage.getItem('usuario')+'&latitud='+position.coords.latitude+'&longitud='+position.coords.longitude)
+              .success(function (data) {
+                marcadoresIniciales=[];
+        
+                for (var i =0; i < data.length ; i++) {
+
+                  if (data[i].restaurante!=null) {
+
+                    for (var j = 0; j < ListaServicios.restaurantes.length; j++) {
+                      if (data[i].restaurante.nombre==ListaServicios.restaurantes[j].message) {
+                        ListaServicios.restaurantes[j].disponibilidadNumerico=data[i].restaurante.estado.disponibilidad;
+                        marcadoresIniciales.push(ListaServicios.restaurantes[j]);
+                      }
+                    }
+
+
+                  }
+                  if (data[i].fotocopiadora!=null) {
+                    for (var j = 0; j < ListaServicios.fotocopiadoras.length; j++) {
+                      if (data[i].fotocopiadora.nombre==ListaServicios.fotocopiadoras[j].message) {
+                        ListaServicios.fotocopiadoras[j].disponibilidadNumerico=data[i].fotocopiadora.estado.disponibilidad;
+                        marcadoresIniciales.push(ListaServicios.fotocopiadoras[j]);
+                      }
+                    }
+
+                  }
+                  if (data[i].sitio!=null) {
+                    for (var j = 0; j < ListaServicios.sitiosEstudio.length; j++) {
+                      if (data[i].sitio.nombre==ListaServicios.sitiosEstudio[j].message) {
+                        ListaServicios.sitiosEstudio[j].disponibilidadNumerico=data[i].sitio.estado.disponibilidad;
+                        marcadoresIniciales.push(ListaServicios.sitiosEstudio[j]);
+                      }
+                    }
+
+                  }
+                }
+                $ionicLoading.hide();
+                $scope.markers=JSON.parse(JSON.stringify(marcadoresIniciales));
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+              
+            
+          }, function(err) {
+            $ionicLoading.hide();
+            console.log("Location error!");
+            console.log(err);
+          });
 
 
 
@@ -368,6 +733,7 @@ if ($scope.servicioActual!="restaurantes" && $scope.servicioActual!='fotocopiado
     $("#botonRestaurantes").animate({right: "30px"});
     
   }
+
  }
  else{
   $scope.servicioActual="ninguno";
@@ -376,7 +742,8 @@ if ($scope.servicioActual!="restaurantes" && $scope.servicioActual!='fotocopiado
   $("#botonFotocopia").animate({right: "30px"});
   $("#botonRestaurantes").animate({right: "30px"});
   $("#verLista").animate({bottom : "-45px"});
-  $scope.markers=marcadoresIniciales;
+
+  $scope.markers=JSON.parse(JSON.stringify(marcadoresIniciales));
   
  }
 };
@@ -389,7 +756,7 @@ $scope.irListaServicios=function(){
     $("#botonFotocopia").css({right: "-100px"});
     $("#botonRestaurantes").css({right: "-150px"});
     $("#verLista").css({bottom : "-45px"});
-  $scope.markers=marcadoresIniciales;
+  $scope.markers=JSON.parse(JSON.stringify(marcadoresIniciales));
   $state.go('menu.listaServicios',{'tipo':$scope.servicioActual});
   $scope.servicioActual='ninguno';
 }
@@ -401,47 +768,50 @@ $scope.mostrarEnMapa=function(tipoServicio){
   if (tipoServicio=='restaurantes') { 
     $scope.servicioActual='restaurantes';
     var locations=ListaServicios.restaurantes;
-    $scope.markers=locations;
+    $scope.markers=JSON.parse(JSON.stringify(locations));
     $("#botonEstudio").animate({right: "-100px"});
     $("#botonFotocopia").animate({right: "-100px"});
   }
   if (tipoServicio=='fotocopiadoras') { 
     $scope.servicioActual='fotocopiadoras';
     var locations=ListaServicios.fotocopiadoras;
-    $scope.markers=locations;
+    $scope.markers=JSON.parse(JSON.stringify(locations));
     $("#botonEstudio").animate({right: "-100px"});
     $("#botonRestaurantes").animate({right: "-100px"});
   }
   if (tipoServicio=='sitiosEstudio') { 
     $scope.servicioActual='sitiosEstudio';
     var locations=ListaServicios.sitiosEstudio;
-    $scope.markers=locations;
+    $scope.markers=JSON.parse(JSON.stringify(locations));
     $("#botonFotocopia").animate({right: "-100px"});
     $("#botonRestaurantes").animate({right: "-100px"});
   }
+  $scope.localizarGPS();
  
 }
 
 $scope.localizarGPS = function(){
 
-
         $cordovaGeolocation
           .getCurrentPosition()
           .then(function (position) {
-            $scope.center.lat  = position.coords.latitude;
-            $scope.center.lng = position.coords.longitude;
-            $scope.center.zoom = 17;
-           	
-        
-             $scope.markers.gps = {
+            ubicacion = {
               lat:position.coords.latitude,
               lng:position.coords.longitude,
               message: "Estas aca!",
-              focus: true,
-              draggable: false
+              draggable: false,
+              icon:{
+              iconUrl: 'img/gpsSalida.png',
+              iconSize:     [45, 45], 
+              iconAnchor:   [22.35, 40.05] ,
+              popupAnchor:  [1, 0] 
+        }
             };
-
-
+            if ($scope.markers[$scope.markers.length-1].message=="Estas aca!") {
+              $scope.markers.pop();
+            }
+            $scope.markers.push(ubicacion);
+           	
           }, function(err) {
             // error
             console.log("Location error!");
@@ -486,15 +856,127 @@ angular.extend($scope, {
        
             });
 
+$scope.$on('leafletDirectiveMarker.click', function(e, args) {
+    if (args.model.message!="Estas aca!") {
+      $ionicLoading.show();
+    console.log($scope.markers[parseInt(args.modelName)]);
+      $http.get(ip+'/disponibilidad?sitio='+$scope.markers[parseInt(args.modelName)].message)
+              .success(function (data) {
+                console.log(data)
+                $ionicLoading.hide();
+                $state.go('menu.detalleServicio',{nombre:$scope.markers[parseInt(args.modelName)].message,imagen:$scope.markers[parseInt(args.modelName)].imagen, disponibilidad:(data.disponibilidad*100)});
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+      
+    
+    
+  }
+});
 
     
 }])
    
-.controller('listaDeAmigosCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('listaDeAmigosCtrl', ['$scope', '$stateParams','$http','$ionicLoading','$ionicPopup','ipConf',
+function ($scope, $stateParams,$http,$ionicLoading,$ionicPopup,ipConf) {
+  var ip=ipConf;
 
+  $ionicLoading.show();
+            $http.get(ip+'/consultar-listacontactos?usuario='+localStorage.getItem("usuario"))
+              .success(function (data) {
+                $ionicLoading.hide();
+                $scope.listaAmigos=data;
+                           
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+
+$scope.eliminarAmigo=function(nombreAmigo){
+  var confirmPopup = $ionicPopup.confirm({
+     title: 'Eliminar amigo',
+     template: 'Quieres eliminar a '+nombreAmigo
+   });
+
+   confirmPopup.then(function(res) {
+     if(res) {
+       console.log('You are sure');
+     } else {
+       console.log('You are not sure');
+     }
+   });
+}
+
+
+
+}])
+.controller('agregarAmigoCtrl', ['$scope', '$stateParams','$http','$ionicLoading','$ionicPopup','ipConf',
+function ($scope, $stateParams,$http,$ionicLoading,$ionicPopup,ipConf) {
+  var ip=ipConf;
+
+  $scope.agregarAmigo= function(){
+    nombreAmigo=document.getElementById("nombreAmigo").value;
+    mensaje="Te ha agregado "+nombreAmigo;
+  if (nombreAmigo.length>0) {
+$ionicLoading.show();
+            $http.get(ip+'/agregar-contacto?usuario='+localStorage.getItem("usuario")+'&contacto='+nombreAmigo)
+              .success(function (data) {
+                
+                console.log(data);
+                if (data.idUsuario!=null) {
+                  $http.get(ip+'/agregar-notificacion?remitente='+localStorage.getItem("usuario")+'&destinatario='+nombreAmigo+"&tipo=agregar&cometario="+mensaje)
+              .success(function (data) {
+                $http.get(ip+'/agregar-contacto?usuario='+nombreAmigo+'&contacto='+localStorage.getItem("usuario"))
+              .success(function (data) {
+                $ionicLoading.hide();
+                
+                           
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+                
+                           
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+                  var alertPopup = $ionicPopup.alert({
+                              title: 'Amigo agregado',
+                               template: ''
+                              });
+                }
+                else{
+                  var alertPopup = $ionicPopup.alert({
+                              title: 'El usuario no existe en NUBI',
+                               template: ''
+                              });
+                }
+                           
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+            }
+      document.getElementById("nombreAmigo").value="";
+  }
+  
 
 }])
    
@@ -526,31 +1008,115 @@ function ($scope, $stateParams) {
 
 }])
 
-.controller('registroCtrl', ['$scope', '$stateParams','$ionicHistory','$state',
-function ($scope, $stateParams,$ionicHistory,$state ) {
-
+.controller('registroCtrl', ['$scope', '$stateParams','$ionicHistory','$state','$ionicPopup','$ionicLoading','$http','ipConf',
+function ($scope, $stateParams,$ionicHistory,$state,$ionicPopup,$ionicLoading,$http,ipConf ) {
+var ip=ipConf;
 $scope.registro=function(){
-  $ionicHistory.nextViewOptions({
-    disableBack: true
-  });
-  $state.go('configuracionInicial');
+  
+  
+
+  var usuario=document.getElementById("usuarioReg").value;
+  var pass=document.getElementById("pass").value;
+  var passwordConfirm=document.getElementById("passwordConfirm").value;
+  var carrera=document.getElementById("carrera").value;
+  if (pass.length>0) {
+    if (pass==passwordConfirm) {
+      $ionicLoading.show();
+      $http.get(ip+'/validar-usuario?usuario='+usuario+'&pass='+pass)
+              .success(function (data) {
+                  
+                  console.log(data);
+                  if (data.validacionCuenta==false) {
+                    $ionicLoading.hide();
+                    var alertPopup = $ionicPopup.alert({
+                              title: 'Nombre usuario no valido',
+                               template: 'Digita un usuario valido de la PUJ'
+                              });
+                  }
+                  if (data.Cuenta==false) {
+                    $ionicLoading.hide();
+                    var alertPopup = $ionicPopup.alert({
+                              title: 'Ya registrado',
+                               template: 'El usuario ya se encuentra registrado'
+                              });
+
+                  }
+                  if (data.Cuenta==true) {
+                    $ionicLoading.hide();
+                    var alertPopup = $ionicPopup.alert({
+                              title: 'Registro exitoso'                            
+                              });
+                    localStorage.setItem("usuario",document.getElementById("usuarioReg").value);
+                    $ionicHistory.nextViewOptions({
+                    disableBack: true
+                    });
+                    $state.go('configuracionInicial');
+                  }
+                
+              });
+  
+    }
+    else{
+      var alertPopup = $ionicPopup.alert({
+                              title: 'Contraseñas no coinciden',
+                               template: 'Digita los mismos valores en los campos de las contraseñas'
+                              });
+       document.getElementById("pass").value="";
+       document.getElementById("passwordConfirm").value="";
+
+    }
+  }
+  else{
+    var alertPopup = $ionicPopup.alert({
+                              title: 'Contraseña invalida',
+                               template: 'Debe tener minimo 8 caracteres'
+                              });
+       document.getElementById("pass").value="";
+       document.getElementById("passwordConfirm").value="";
+  }
+
 }
 
 }])
 
-.controller('loginCtrl', ['$scope', '$stateParams','$ionicHistory','$state',
-function ($scope, $stateParams,$ionicHistory,$state ) {
-
+.controller('loginCtrl', ['$scope', '$stateParams','$ionicHistory','$state','$http','$ionicPopup','$ionicLoading','ipConf',
+function ($scope, $stateParams,$ionicHistory,$state,$http,$ionicPopup,$ionicLoading,ipConf ) {
+var ip=ipConf;
 
 if (localStorage.getItem("usuario")!=null) {
   $state.go('menu.home');
 }
 $scope.login=function(){
-  localStorage.setItem("usuario",document.getElementById("usuario").value);
-  $ionicHistory.nextViewOptions({
-    disableBack: true
-  });
-  $state.go('menu.home');
+  var nombreUsuario=document.getElementById("usuario").value;
+  var password=document.getElementById("password").value;
+  $ionicLoading.show();
+  $http.get(ip+'/verificar-usuario?usuario='+nombreUsuario+'&pass='+password)
+              .success(function (data) {
+                console.log(data)
+                if (data.login==true) {
+                  localStorage.setItem("usuario",document.getElementById("usuario").value);
+                  $ionicHistory.nextViewOptions({
+                    disableBack: true
+                  });
+                  $ionicLoading.hide();
+                  $state.go('menu.home');
+                }
+                else{
+                  $ionicLoading.hide();
+                  var alertPopup = $ionicPopup.alert({
+                              title: 'Usuario o contraseña invalido',
+                               template: ''
+                              });
+                   }
+                
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+  
 }
 
 }])
@@ -563,9 +1129,16 @@ function ($scope, $stateParams) {
 
 }])
 
-.controller('menuCtrl', ['$scope', '$stateParams','$ionicHistory','$state', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+
+.controller('notificacionesCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
+function ($scope, $stateParams) {
+
+
+}])
+
+.controller('menuCtrl', ['$scope', '$stateParams','$ionicHistory','$state', 
 function ($scope, $stateParams,$ionicHistory,$state) {
 $scope.nombreUsuario=localStorage.getItem("usuario");
 $scope.cerrarSesion=function(){
@@ -704,4 +1277,14 @@ function ($scope, $stateParams) {
 
     return coordinates;
 };
- 
+
+var disponibilidadAPalabra=function(porcentaje){
+  if (porcentaje<0.4) {
+    return "Vacio";
+  }
+  if (porcentaje<0.6) {
+    return "Medio";
+  }
+  return "Lleno"
+
+ }

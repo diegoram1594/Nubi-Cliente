@@ -51,7 +51,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu.detalleServicio', {
-    url: '/detalleserviciosPage:nombre/:imagen',
+    url: '/detalleserviciosPage:nombre/:imagen/:disponibilidad/:tipo',
     views: {
       'side-menu21': {
         templateUrl: 'templates/detalleServicio.html',
@@ -76,6 +76,25 @@ angular.module('app.routes', [])
       'side-menu21': {
         templateUrl: 'templates/listaDeAmigos.html',
         controller: 'listaDeAmigosCtrl'
+      }
+    }
+  })
+  .state('menu.agregarAmigo', {
+    url: '/agregarAmigo',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/agregarAmigo.html',
+        controller: 'agregarAmigoCtrl'
+      }
+    }
+  })
+
+  .state('menu.notificaciones', {
+    url: '/notificaciones',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/notificaciones.html',
+        controller: 'notificacionesCtrl'
       }
     }
   })

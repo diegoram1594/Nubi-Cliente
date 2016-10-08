@@ -11,9 +11,9 @@
             <img src='{{imagenServicio}}' ng-show="botonMostarImagen" id="contenedorImagen">
             <div id="favorito" ng-hide="panelNotificacionActivado" ng-click="cambiarFavorito()"></div>
             <div id="panelNotificacion" ng-show="panelNotificacionActivado">
-                <div id="notificacionVacio" ng-click="seleccionDisponibilidad('vacio')">Vacio</div>
-                <div id="notificacionMedio" ng-click="seleccionDisponibilidad('medio')">Medio</div>
-                <div id="notificacionLleno" ng-click="seleccionDisponibilidad('lleno')">Lleno</div>
+                <div id="notificacionVacio" ng-click="seleccionDisponibilidad('Libre')">Libre</div>
+                <div id="notificacionMedio" ng-click="seleccionDisponibilidad('Medio')">Medio</div>
+                <div id="notificacionLleno" ng-click="seleccionDisponibilidad('Lleno')">Lleno</div>
                   <form ng-show="notificacionSeleccionada">
                   <h4 id="textoComentario" ng-show="notificacionSeleccionada">Escribe un comentario (opcional)</h4>
                   <input type="text" name="comentario" id="comentario">
@@ -32,40 +32,20 @@
         </div>        
     
             <h4 id="detalleServicio-heading3" style="color:#000000;">Comentarios</h4>
-            <div id="contenedorComentarios">
+            <div id="contenedorComentarios" ng-repeat="comentarios in comentariosCargados">
                 <img src="css/img/userIcon.png" id="imagenUsuario">
                 <div id="comentarioUsuario">
-                <div style="color:grey;">Hace XX minutos.<br>  Disponibilidad: Lleno</div>
-                <div>Este es un comentario muy largo dejado por un usuario que se enojo mucho y explica cada detalle de lo que paso asi no le importe a nadie</div>
+                <div style="color:grey;">Hace {{comentarios.tiempo}} minutos.<br>  Disponibilidad: {{comentarios.estado}}</div>
+                <div>{{comentarios.comentario}}</div>
                  </div>
                 <div id="valoracionComentarioUsuario">
-                    <div id="like"></div>
-                    <div id="dislike"></div>
+                    <div id="like" ng-click="like('{{comentarios.id}}')"></div>
+                    <div id="dislike" ng-click="dislike('{{comentarios.id}}')"></div>
                 </div>
-            </div>
-            <div id="contenedorComentarios">
-                <img src="css/img/userIcon.png" id="imagenUsuario">
-                <div id="comentarioUsuario">
-                <div style="color:grey;">Hace XX minutos.<br>  Disponibilidad: Lleno</div>
-                <div>escribo poco</div>
-                 </div>
-                <div id="valoracionComentarioUsuario">
-                    <div id="like"></div>
-                    <div id="dislike"></div>
-                </div>
-            </div>
-            <div id="contenedorComentarios">
-                <img src="css/img/userIcon.png" id="imagenUsuario">
-                <div id="comentarioUsuario">
-                <div style="color:grey;">Hace XX minutos.<br>  Disponibilidad: Lleno</div>
-                <div></div>
-                 </div>
-                <div id="valoracionComentarioUsuario">
-                    <div id="like"></div>
-                    <div id="dislike"></div>
-                </div>
+
             </div>
             <br>
+           
     </ion-content>
 </ion-view>
 

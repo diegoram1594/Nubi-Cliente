@@ -1,19 +1,10 @@
 <ion-view title="Lista de amigos" id="page16">
     <ion-content padding="true" class="has-header">
-        <ion-list id="listaDeAmigos-list4">
-            <ion-item class="item-avatar  " id="listaDeAmigos-list-item24">
-                <h2>Amigo 1</h2>
+        <ion-list id="listaDeAmigos-list4" ng-repeat="amigo in listaAmigos">
+            <ion-item class="item-avatar  " id="listaDeAmigos-list-item24" on-hold="eliminarAmigo({{amigo}})">
+                <h2>{{amigo}}</h2>
                 <p>Ver perfil</p>
-            </ion-item>
-            <ion-item class="item-avatar  " id="listaDeAmigos-list-item25">
-                <h2>Amigo 2</h2>
-                <p>Ver perfil</p>
-            </ion-item>
-            <ion-item class="item-avatar  " id="listaDeAmigos-list-item26">
-                <h2>Amigo 3</h2>
-                <p>Ver perfil</p>
-            </ion-item>
         </ion-list>
-        <button id="listaDeAmigos-button13" class=" button button-positive  button-block icon-left ion-android-person-add ">Agregar Amigo</button>
+        <button id="listaDeAmigos-button13" class=" button button-positive  button-block icon-left ion-android-person-add "  ui-sref="menu.agregarAmigo">Agregar Amigo</button>
     </ion-content>
 </ion-view>
