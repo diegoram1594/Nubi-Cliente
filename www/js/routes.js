@@ -29,7 +29,7 @@ angular.module('app.routes', [])
     views: {
       'side-menu21': {
         templateUrl: 'templates/configuracion.html',
-        controller: 'configuraciNCtrl'
+        controller: 'configuracionCtrl'
       }
     }
   })
@@ -119,12 +119,12 @@ angular.module('app.routes', [])
     }
   })
 
-  .state('menu.grupo', {
+  .state('menu.detallesGrupo', {
     url: '/detallesGrupo',
     views: {
       'side-menu21': {
-        templateUrl: 'templates/grupo.html',
-        controller: 'grupoCtrl'
+        templateUrl: 'templates/detallesGrupo.html',
+        controller: 'detallesGrupoCtrl'
       }
     }
   })
@@ -146,6 +146,15 @@ angular.module('app.routes', [])
       'side-menu21': {
         templateUrl: 'templates/crearAlertaGrupo.html',
         controller: 'crearAlertaGrupoCtrl'
+      }
+    }
+  })
+  .state('menu.crearGrupo', {
+    url: '/crearGrupo',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/crearGrupo.html',
+        controller: 'crearGrupoCtrl'
       }
     }
   })

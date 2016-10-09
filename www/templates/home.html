@@ -6,8 +6,8 @@
         <div  id="botonRestaurantes" ng-click="mostrarEnMapa('restaurantes')"></div>
         <div  id="botonFotocopia" ng-click="mostrarEnMapa('fotocopiadoras')"></div>
         <div  id="botonEstudio" ng-click="mostrarEnMapa('sitiosEstudio')"></div>
-        <div  id="botonNotificaciones" ui-sref="menu.notificaciones"></div>
-        <div  id="numeroNotificaciones" ui-sref="menu.notificaciones">2</div>
+        <div  id="botonNotificaciones" ng-click="irNotificaciones()" ></div>
+        <div  id="numeroNotificaciones" ng-click="irNotificaciones()" ng-show="mostarNotificaciones">{{numeroNotificaciones}}</div>
         <div  id="botonGPS" ng-click="localizarGPS()"></div>
         <div ng-click="mostrarServicios()" id="botonBusquedaHome"></div>
         <div  id="verLista" ng-click="irListaServicios()" >Ver Lista</div>

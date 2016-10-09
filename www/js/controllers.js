@@ -1,10 +1,11 @@
 angular.module('app.controllers',  ['leaflet-directive','ngAnimate'])
         
-.controller('configuraciNCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
-
+.controller('configuracionCtrl', ['$scope', '$stateParams', '$ionicHistory','$state',
+function ($scope, $stateParams,$ionicHistory,$state) {
+  $ionicHistory.nextViewOptions({
+                    disableBack: true
+                    });
+  $state.go('configuracionInicial');
 
 }])
 
@@ -27,7 +28,7 @@ function ($scope, $stateParams,$state,$http,$ionicLoading,$ionicPopup,ipConf) {
   {pregunta:"Cuando buscas un sitio de estudio prefieres un lugar con tolerancia a ruido ..."},
   {pregunta:"Para estudiar buscas un espacio ..."},
   {pregunta:"Prefieres un sitio de fotocopiado ..."},
-  {pregunta:"¿Permites que NUBI de tu localización a tus amigos y contactos?"},
+  {pregunta:"¿Permites que NUBI de tu localización a tus amigos?"},
   {pregunta:"¿Presenta alguna condición física que dificulte su movilidad en el campus?"}];
   preguntas1=[{opcion:'Poco',color:'#0092D7',fondo:''},{opcion:'Medio',color:'#0092D7',fondo:''},{opcion:'Moderado',color:'#0092D7',fondo:''},{opcion:'Mucho',color:'#0092D7',fondo:''},{opcion:'Sin Limite',color:'#0092D7',fondo:''}];
   preguntas2=[{opcion:'numero',inicial:'25',min:'0',max:'50',medida:'metros'}];
@@ -249,6 +250,13 @@ $cordovaGeolocation
             console.log("Location error!");
             console.log(err);
           });
+
+}])
+.controller('detallesGrupoCtrl',['$scope', '$stateParams','$ionicHistory','$state','$ionicPopup','$ionicLoading','$http','ipConf',
+function ($scope, $stateParams,$ionicHistory,$state,$ionicPopup,$ionicLoading,$http,ipConf ) {
+
+
+
 
 }])
    
@@ -641,19 +649,11 @@ $scope.dislike=function(id){
 function ($scope,$cordovaGeolocation,$http,$window,$state,$ionicLoading,$ionicPopup,ListaServicios,ipConf) {
 $scope.mostrarUbicaciones=false;
 $scope.servicioActual="ninguno";
+$scope.mostarNotificaciones=false;
 var ubicacion=null;
 var ip=ipConf;
 
 var marcadoresIniciales=[];
-/*
-var aleatorio = Math.round(Math.random()*(ListaServicios.restaurantes.length-1));
-marcadoresIniciales.push(ListaServicios.restaurantes[aleatorio]);
-var aleatorio = Math.round(Math.random()*(ListaServicios.fotocopiadoras.length-1));
-marcadoresIniciales.push(ListaServicios.fotocopiadoras[aleatorio]);
-var aleatorio = Math.round(Math.random()*(ListaServicios.sitiosEstudio.length-1));
-marcadoresIniciales.push(ListaServicios.sitiosEstudio[aleatorio]);
-
-*/
 $ionicLoading.show();
 $cordovaGeolocation
           .getCurrentPosition()
@@ -696,8 +696,48 @@ $cordovaGeolocation
 
                   }
                 }
-                $ionicLoading.hide();
+                
                 $scope.markers=JSON.parse(JSON.stringify(marcadoresIniciales));
+
+            $http.get(ip+'/contar-notificaciones?usuario='+localStorage.getItem("usuario"))
+              .success(function (data) {
+
+                  if(data.notificaciones>0){
+                    $scope.mostarNotificaciones=true;
+                    $scope.numeroNotificaciones=data.notificaciones;
+                  }
+                  else{
+                    $scope.mostarNotificaciones=false;
+                  }
+            $http.get(ip+'/obtener-contactos?usuario='+localStorage.getItem("usuario"))
+              .success(function (data) {
+                $ionicLoading.hide();
+                console.log("contactos");
+                console.log(data);
+                for (var i = 0; i < data.length; i++) {
+                  var amigo={message : data[i].idUsuario,
+                  lat : data[i].localizacion.latitud,
+                 lng : data[i].localizacion.longitud,
+                 tipo:"amigo"}
+                 $scope.markers.push(amigo);
+                  
+                }
+                           
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+     
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
               }).error(function (data, status, headers, config) {
                 $ionicLoading.hide();
                  var alertPopup = $ionicPopup.alert({
@@ -713,7 +753,11 @@ $cordovaGeolocation
             console.log(err);
           });
 
-
+$scope.irNotificaciones= function(){
+  $scope.mostarNotificaciones=false;
+  $scope.numeroNotificaciones=0;
+  $state.go('menu.notificaciones');
+}
 
 $scope.mostrarServicios= function(){
 if ($scope.servicioActual!="restaurantes" && $scope.servicioActual!='fotocopiadoras' && $scope.servicioActual!='sitiosEstudio') {
@@ -857,7 +901,7 @@ angular.extend($scope, {
             });
 
 $scope.$on('leafletDirectiveMarker.click', function(e, args) {
-    if (args.model.message!="Estas aca!") {
+    if ($scope.markers[parseInt(args.modelName)].message!="Estas aca!" && $scope.markers[parseInt(args.modelName)].tipo!="amigo") {
       $ionicLoading.show();
     console.log($scope.markers[parseInt(args.modelName)]);
       $http.get(ip+'/disponibilidad?sitio='+$scope.markers[parseInt(args.modelName)].message)
@@ -907,9 +951,41 @@ $scope.eliminarAmigo=function(nombreAmigo){
 
    confirmPopup.then(function(res) {
      if(res) {
-       console.log('You are sure');
+       $ionicLoading.show();
+            $http.get(ip+'/eliminar-contacto?usuario='+localStorage.getItem("usuario")+'&contacto='+nombreAmigo)
+              .success(function (data) {
+                $ionicLoading.hide();
+                  $ionicLoading.show();
+            $http.get(ip+'/consultar-listacontactos?usuario='+localStorage.getItem("usuario"))
+              .success(function (data) {
+                $ionicLoading.hide();
+                $scope.listaAmigos=data;
+                           
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+
+
+                var alertPopup = $ionicPopup.alert({
+                              title: nombreAmigo+' eliminado de lista de amigos',
+                               template: ''
+                              });
+                
+                           
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+
      } else {
-       console.log('You are not sure');
+       console.log('No se elimino');
      }
    });
 }
@@ -917,13 +993,13 @@ $scope.eliminarAmigo=function(nombreAmigo){
 
 
 }])
-.controller('agregarAmigoCtrl', ['$scope', '$stateParams','$http','$ionicLoading','$ionicPopup','ipConf',
-function ($scope, $stateParams,$http,$ionicLoading,$ionicPopup,ipConf) {
+.controller('agregarAmigoCtrl', ['$scope', '$stateParams','$http','$ionicLoading','$ionicPopup','$state','$ionicHistory','ipConf',
+function ($scope, $stateParams,$http,$ionicLoading,$ionicPopup,$state,$ionicHistory,ipConf) {
   var ip=ipConf;
 
   $scope.agregarAmigo= function(){
     nombreAmigo=document.getElementById("nombreAmigo").value;
-    mensaje="Te ha agregado "+nombreAmigo;
+    mensaje="Te ha agregado "+localStorage.getItem("usuario");
   if (nombreAmigo.length>0) {
 $ionicLoading.show();
             $http.get(ip+'/agregar-contacto?usuario='+localStorage.getItem("usuario")+'&contacto='+nombreAmigo)
@@ -931,12 +1007,13 @@ $ionicLoading.show();
                 
                 console.log(data);
                 if (data.idUsuario!=null) {
-                  $http.get(ip+'/agregar-notificacion?remitente='+localStorage.getItem("usuario")+'&destinatario='+nombreAmigo+"&tipo=agregar&cometario="+mensaje)
+                  $http.get(ip+'/agregar-notificacion?remitente='+localStorage.getItem("usuario")+'&destinatario='+nombreAmigo+"&comentario="+mensaje+'&tipo=amigo')
               .success(function (data) {
+                console.log(data);
                 $http.get(ip+'/agregar-contacto?usuario='+nombreAmigo+'&contacto='+localStorage.getItem("usuario"))
               .success(function (data) {
+                console.log(data);
                 $ionicLoading.hide();
-                
                            
               }).error(function (data, status, headers, config) {
                 $ionicLoading.hide();
@@ -954,12 +1031,19 @@ $ionicLoading.show();
                                template: 'Revisa tu conexión de internet'
                               });
               });
+              $ionicLoading.hide();
                   var alertPopup = $ionicPopup.alert({
                               title: 'Amigo agregado',
                                template: ''
                               });
+                  $ionicHistory.nextViewOptions({
+                    disableBack: true
+                    });
+                  $state.go('menu.home');
+
                 }
                 else{
+                  $ionicLoading.hide();
                   var alertPopup = $ionicPopup.alert({
                               title: 'El usuario no existe en NUBI',
                                template: ''
@@ -1000,13 +1084,118 @@ angular.extend($scope, {
             });
 }])
    
-.controller('listaGruposCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('listaGruposCtrl',['$scope', '$stateParams','$ionicHistory','$state','$ionicPopup','$ionicLoading','$http','ipConf',
+function ($scope, $stateParams,$ionicHistory,$state,$ionicPopup,$ionicLoading,$http,ipConf ) {
+  var ip=ipConf;
+  $ionicLoading.show();
+            $http.get(ip+'/obtener-grupos?usuario='+localStorage.getItem("usuario"))
+              .success(function (data) {
+                $ionicLoading.hide();
+                console.log(data);
+                $scope.gruposCargados=data;
+                
+                           
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+
+}])
+
+.controller('crearGrupoCtrl',['$scope', '$stateParams','$ionicHistory','$state','$ionicPopup','$ionicLoading','$http','ipConf',
+function ($scope, $stateParams,$ionicHistory,$state,$ionicPopup,$ionicLoading,$http,ipConf ) {
+$ionicLoading.show();
+var ip=ipConf;
+$scope.amigosSeleccionados=[];
+  $ionicLoading.show();
+            $http.get(ip+'/consultar-listacontactos?usuario='+localStorage.getItem("usuario"))
+              .success(function (data) {
+                $ionicLoading.hide();
+                $scope.listaAmigos=data;
+
+                           
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+
+$scope.crearGrupo=function(){
+  $ionicLoading.show();
+  nombreGrupo=document.getElementById("nombreGrupo").value;
+
+var ip=ipConf;
+  $ionicLoading.show();
+            $http.get(ip+'/crear-grupo?usuario='+nombreGrupo+'&admin='+localStorage.getItem("usuario"))
+              .success(function (data) {
+                       
+            $http.get(ip+'/agregar-contactogrupo?grupo='+nombreGrupo+'&usuario='+localStorage.getItem("usuario"))
+              .success(function (data) {
+               
+               
+
+               for (var i = 0; i < $scope.amigosSeleccionados.length; i++) {
+               $http.get(ip+'/agregar-contactogrupo?grupo='+nombreGrupo+'&usuario='+$scope.amigosSeleccionados[i])
+              .success(function (data) {
+                console.log(data);
+                $ionicLoading.hide();
+               
+                           
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+              }
+
+              
+                           
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+
+                
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
+}
+$scope.agregarAmigosGrupo=function(){
+
+}
+
+
+$scope.agregarAmigoLista=function(seleccion){
+  esta=false;
+for (var i = 0; i < $scope.amigosSeleccionados.length; i++) {
+  if (seleccion==$scope.amigosSeleccionados[i]) {
+    esta=true;
+    $scope.amigosSeleccionados.splice(i, 1);
+  }
+}
+if (esta==false) {
+  $scope.amigosSeleccionados.push(seleccion)
+  console.log(seleccion)
+}
+}
 
 
 }])
+
 
 .controller('registroCtrl', ['$scope', '$stateParams','$ionicHistory','$state','$ionicPopup','$ionicLoading','$http','ipConf',
 function ($scope, $stateParams,$ionicHistory,$state,$ionicPopup,$ionicLoading,$http,ipConf ) {
@@ -1121,19 +1310,30 @@ $scope.login=function(){
 
 }])
    
-.controller('grupoCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
 
 
-}])
-
-
-.controller('notificacionesCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+.controller('notificacionesCtrl', ['$scope', '$stateParams','$http','$ionicLoading','$ionicPopup','ipConf',
+function ($scope, $stateParams,$http,$ionicLoading,$ionicPopup,ipConf) {
+  var ip=ipConf;
+  $scope.notificacionesCargadas=[];
+$ionicLoading.show();
+            $http.get(ip+'/consultar-notifdestinatario?usuario='+localStorage.getItem("usuario"))
+              .success(function (data) {
+                $ionicLoading.hide();
+                console.log(data);
+                
+                
+                  $scope.notificacionesCargadas=data;
+                
+                
+                           
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
 
 
 }])

@@ -1,7 +1,7 @@
 <ion-view title="Lista de amigos" id="page16">
     <ion-content padding="true" class="has-header">
         <ion-list id="listaDeAmigos-list4" ng-repeat="amigo in listaAmigos">
-            <ion-item class="item-avatar  " id="listaDeAmigos-list-item24" on-hold="eliminarAmigo({{amigo}})">
+            <ion-item class="item-avatar  " id="listaDeAmigos-list-item24" on-hold="eliminarAmigo('{{amigo}}')">
                 <h2>{{amigo}}</h2>
                 <p>Ver perfil</p>
         </ion-list>

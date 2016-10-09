@@ -1,0 +1,12 @@
+<ion-view title="Crear grupo" id="crearGrupo">
+    <ion-content padding="true" class="has-header">
+    	<label class="item item-input">
+              <input type="text" placeholder="Nombre de Grupo" id="nombreGrupo"  autocorrect="off">
+          </label>
+          <br>
+        <ion-list ng-repeat="amigo in listaAmigos">
+  			<ion-checkbox ng-click="agregarAmigoLista('{{amigo}}')">{{amigo}}</ion-checkbox>
+		</ion-list>
+        <button id="listaDeAmigos-button13" class=" button button-positive  button-block icon-left ion-android-person-add "  ng-click="crearGrupo()">Crear Grupo</button>
+    </ion-content>
+</ion-view>
