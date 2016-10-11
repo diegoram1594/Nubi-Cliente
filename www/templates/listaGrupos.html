@@ -1,7 +1,7 @@
 <ion-view title="Lista Grupos" id="page13">
     <ion-content padding="true" class="has-header">
         <ion-list id="listaGrupos-list7" ng-repeat="grupo in gruposCargados">
-            <ion-item class="item-avatar  " id="listaGrupos-list-item33" ui-sref="menu.detallesGrupo">
+            <ion-item class="item-avatar  " id="listaGrupos-list-item33" ng-click="irDetalleGrupo('{{grupo}}')">
                 <h2>{{grupo}}</h2>
             </ion-item>
         </ion-list>

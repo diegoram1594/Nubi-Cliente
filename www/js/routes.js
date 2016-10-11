@@ -120,7 +120,7 @@ angular.module('app.routes', [])
   })
 
   .state('menu.detallesGrupo', {
-    url: '/detallesGrupo',
+    url: '/detallesGrupo:nombreGrupo',
     views: {
       'side-menu21': {
         templateUrl: 'templates/detallesGrupo.html',
@@ -141,7 +141,7 @@ angular.module('app.routes', [])
 
 
   .state('menu.crearAlertaGrupo', {
-    url: '/crearAlerta',
+    url: '/crearAlerta:nombreGrupo',
     views: {
       'side-menu21': {
         templateUrl: 'templates/crearAlertaGrupo.html',
