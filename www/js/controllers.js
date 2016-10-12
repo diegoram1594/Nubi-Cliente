@@ -2,10 +2,12 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
 .controller('configuracionCtrl', ['$scope', '$stateParams', '$ionicHistory', '$state',
   function($scope, $stateParams, $ionicHistory, $state) {
-    $ionicHistory.nextViewOptions({
-      disableBack: true
-    });
-    $state.go('configuracionInicial');
+    
+
+    $scope.irAConfiguracion=function(){
+      $state.go('configuracionInicial');
+    }
+
 
   }
 ])
@@ -20,19 +22,19 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
     $scope.numPregunta = 1;
     $scope.valorRango = 400;
     var enunciados = [{
-        pregunta: 'Que distancia deseas caminar desde tu localización hasta tu lugar de interés?'
+        pregunta: '¿Qué distancia deseas caminar desde tu localización hasta tu lugar de interés?'
       }, {
         pregunta: "En caso de no encontrar un sitio en tu distancia elegida ¿Cuánto estarías dispuesta a caminar de más?"
       }, {
-        pregunta: "Tiempo máximo de espera en algun sitio"
+        pregunta: "Tiempo máximo de espera en algún sitio"
       }, {
-        pregunta: "Tiempo mínimo de espera en algun sitio"
+        pregunta: "Tiempo mínimo de espera en algún sitio"
       }, {
-        pregunta: "En cuanto a la ocupación de un lugar prefieres que el sitio este ..."
+        pregunta: "En cuanto a la ocupación de un lugar prefieres que el sitio este..."
       },
       //  {pregunta:"¿Que prefieres ruido.."},
       {
-        pregunta: "Cuando buscas un sitio de estudio prefieres un lugar con tolerancia a ruido ..."
+        pregunta: "Cuando buscas un sitio de estudio prefieres un lugar con tolerancia a ruido..."
       }, {
         pregunta: "Para estudiar buscas un espacio ..."
       }, {
@@ -836,6 +838,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
 .controller('homeCtrl', ['$scope', '$cordovaGeolocation', '$http', '$window', '$state', '$ionicLoading', '$ionicPopup', 'ListaServicios', 'ipConf',
   function($scope, $cordovaGeolocation, $http, $window, $state, $ionicLoading, $ionicPopup, ListaServicios, ipConf) {
+    
     $scope.mostrarUbicaciones = false;
     $scope.servicioActual = "ninguno";
     $scope.mostarNotificaciones = false;
@@ -1612,6 +1615,9 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
 
         $scope.notificacionesCargadas = data;
+        if (data.length==0) {
+          $scope.notificacionesCargadas.push("No tienes notificaciones actualmente");
+        }
 
 
 

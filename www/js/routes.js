@@ -25,7 +25,7 @@ angular.module('app.routes', [])
 
 
   .state('menu.configuracion', {
-    url: '/usuarioConfiguracion',
+    url: '/configuracion',
     views: {
       'side-menu21': {
         templateUrl: 'templates/configuracion.html',
@@ -62,6 +62,7 @@ angular.module('app.routes', [])
 
   .state('menu.home', {
     url: '/homePage',
+    cache: false,
     views: {
       'side-menu21': {
         templateUrl: 'templates/home.html',
@@ -72,6 +73,7 @@ angular.module('app.routes', [])
 
   .state('menu.listaDeAmigos', {
     url: '/listaamigosPage',
+    cache: false,
     views: {
       'side-menu21': {
         templateUrl: 'templates/listaDeAmigos.html',
@@ -111,6 +113,7 @@ angular.module('app.routes', [])
 
   .state('menu.listaGrupos', {
     url: '/Listagrupos',
+    cache: false,
     views: {
       'side-menu21': {
         templateUrl: 'templates/listaGrupos.html',

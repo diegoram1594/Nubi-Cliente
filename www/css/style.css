@@ -179,8 +179,9 @@ body {
     height: 5%;
     padding: 5%;
     border: 3px solid #0092D7;
+    border-radius: 15%;
     display: inline-block;
-    font-size: 200%;
+    font-size: 150%;
     font-weight: bolder;
     color: #0092D7;
     line-height: 0px;
