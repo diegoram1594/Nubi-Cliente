@@ -178,7 +178,7 @@ angular.module('app.services', [])
       message : "Biblioteca",
       lat : 4.62881,
       lng : -74.06464,
-      imagen:"img/7IHkbLjlTACS087GTxG5_article.jpg",
+      imagen:"img/biblioteca.jpg",
       disponibilidad:0,
       disponibilidadNumerico:0,
       puntaje:0,

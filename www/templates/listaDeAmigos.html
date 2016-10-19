@@ -1,8 +1,11 @@
 <ion-view title="Lista de amigos" id="page16">
     <ion-content padding="true" class="has-header">
+    <h5 style="color: #A6A6A6; text-align: center;">Para elimininar un contacto mantenlo oprimido</h3>
         <ion-list id="listaDeAmigos-list4" ng-repeat="amigo in listaAmigos">
             <ion-item class="item-avatar  " id="listaDeAmigos-list-item24" on-hold="eliminarAmigo('{{amigo}}')">
+               <img src="/css/img/userIcon.png">
                 <h2>{{amigo}}</h2>
+
         </ion-list>
         <button id="listaDeAmigos-button13" class=" button button-positive  button-block icon-left ion-android-person-add "  ui-sref="menu.agregarAmigo">Agregar Amigo</button>
     </ion-content>

@@ -190,7 +190,13 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
         console.log(respuestas);
         var ip = ipConf;
         $ionicLoading.show();
-        $http.get(ip + '/agregar-preferencias?usuario=' + localStorage.getItem("usuario") + '&distancia=' + respuestas[0] + '&DistTolerancia=' + respuestas[1] + '&disponibilidad=' + respuestas[4] + '&tiempoMin=' + respuestas[2] + '&tiempoMax=' + respuestas[3] + '&tolerancia=' + respuestas[5] + '&tipoEspacio=' + respuestas[6] + '&fotocopiadora=' + respuestas[7])
+        if (localStorage.getItem("grupo")!=null && localStorage.getItem("grupo")!="") {
+           nombreUsu=localStorage.getItem("grupo");
+        }
+        else{
+          nombreUsu=localStorage.getItem("usuario");
+        }
+        $http.get(ip + '/agregar-preferencias?usuario=' + nombreUsu+ '&distancia=' + respuestas[0] + '&DistTolerancia=' + respuestas[1] + '&disponibilidad=' + respuestas[4] + '&tiempoMin=' + respuestas[2] + '&tiempoMax=' + respuestas[3] + '&tolerancia=' + respuestas[5] + '&tipoEspacio=' + respuestas[6] + '&fotocopiadora=' + respuestas[7])
           .success(function(data) {
 
             valorPrivacidad = "";
@@ -200,9 +206,10 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
               valorPrivacidad = false;
             }
 
-            $http.get(ip + '/agregar-restricciones?usuario=' + localStorage.getItem("usuario") + '&privacidad=' + valorPrivacidad + "&movilidad=" + respuestas[9])
+            $http.get(ip + '/agregar-restricciones?usuario=' + nombreUsu + '&privacidad=' + valorPrivacidad + "&movilidad=" + respuestas[9])
               .success(function(data) {
                 $ionicLoading.hide();
+                localStorage.setItem("grupo","")
                 $state.go('menu.home');
                 console.log(data)
 
@@ -1446,7 +1453,9 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
                     $ionicHistory.nextViewOptions({
                   disableBack: true
                 });
-                    $state.go('menu.home');
+                    
+                    localStorage.setItem("grupo", document.getElementById("nombreGrupo").value);
+                    $state.go('configuracionInicial');
 
 
             }).error(function(data, status, headers, config) {
@@ -1726,19 +1735,28 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
   }
 ])
 
-.controller('crearAlertaGrupoCtrl', ['$scope', '$stateParams', '$ionicHistory', '$state', '$ionicPopup', '$ionicLoading', '$http', 'ipConf',
-    function($scope, $stateParams, $ionicHistory, $state, $ionicPopup, $ionicLoading, $http, ipConf) {
+.controller('crearAlertaGrupoCtrl', ['$scope', '$stateParams', '$ionicHistory', '$state', '$ionicPopup', '$ionicLoading', '$http', 'ipConf','ListaServicios',
+    function($scope, $stateParams, $ionicHistory, $state, $ionicPopup, $ionicLoading, $http, ipConf,ListaServicios) {
      var ip=ipConf;
       $scope.nombreGrupo=$stateParams.nombreGrupo;
       $scope.tipos = [
-     {  nombre: 'Restaurantes' },
-     {  nombre: 'Restaurantes' },
-     {  nombre: 'Sitios de Estudio' }
+     {  name: 'Restaurantes' }, 
+     {  name: 'Fotocopiadoras' },
+     {  name: 'Sitios de Estudio' }
    ];
+   $scope.servicios=[];
     
 
-      $scope.filtroRestarantes=function(){
-        alert(dsadsa);
+      $scope.cambioTipo=function(tipo){
+        if (tipo=='Restaurantes') {
+          $scope.servicios=ListaServicios.restaurantes;
+        }
+        if (tipo=='Fotocopiadoras') {
+          $scope.servicios=ListaServicios.fotocopiadoras;
+        }
+        if (tipo=='Sitios de Estudio') {
+          $scope.servicios=ListaServicios.sitiosEstudio;
+        }
       }
 
   }

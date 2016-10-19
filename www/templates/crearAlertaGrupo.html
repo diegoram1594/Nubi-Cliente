@@ -6,16 +6,19 @@
         <form id="crearAlertaGrupo-form9" class="list ">
             <label class="item item-select " id="crearAlertaGrupo-select1">
                 <span class="input-label">Tipo</span>
-                <select ng-model="tipoSelecionado" ng-options="tipo as tipo.nombre for tipo in tipos">
-                    <option value="">Ninguno Seleccionado</option>
-                </select>
+                <select ng-change="cambioTipo(tipoSeleccionado)" ng-model=tipoSeleccionado>
+                    <option ng-repeat="item in tipos" ng-value="item.name" ng-click="cambioTipo('{{item}}')">{{item.name}}</option>
+             </select>
+                
             </label>
         </form>
         <h3 id="crearAlertaGrupo-heading6" style="color:#000000;">Lugar</h3>
         <form id="crearAlertaGrupo-form10" class="list ">
             <label class="item item-select " id="crearAlertaGrupo-select2">
                 <span class="input-label">Lugar</span>
-                <select></select>
+                <select ng-change="cambioTipo(tipoSeleccionado)" ng-model=servicioSeleccionado>
+                    <option ng-repeat="servicio in servicios" ng-value="servicio.message" ng-click="cambioTipo('{{item}}')">{{servicio.message}}</option>
+             </select>
             </label>
         </form>
         <button id="crearAlertaGrupo-button25" class=" button button-positive  button-block ">Enviar a Grupo</button>
