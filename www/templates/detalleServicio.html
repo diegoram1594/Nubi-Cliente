@@ -39,8 +39,8 @@
                 <div>{{comentarios.comentario}}</div>
                  </div>
                 <div id="valoracionComentarioUsuario">
-                    <div id="like" ng-click="like('{{comentarios.id}}')"></div>
-                    <div id="dislike" ng-click="dislike('{{comentarios.id}}')"></div>
+                    <div id="like" ng-click="like('{{comentarios.id}}')"><div style="position: relative;left: 35px;top:6px;color: green;font-weight: bolder;">{{comentarios.like}}</div></div>
+                    <div id="dislike" ng-click="dislike('{{comentarios.id}}')"><div style="position: relative;left: 35px;top:6px;color: red;font-weight: bolder;">{{comentarios.dislike}}</div></div>
                 </div>
 
             </div>

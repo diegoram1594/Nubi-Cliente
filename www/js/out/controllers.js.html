@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
   * @namespace controladores
   */
 angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
@@ -14,7 +42,10 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
   }
 ])
 
-/** Controlador de plantilla configuracionInicial.html correspondiente a la pantalla de configuración inicial*/
+ /**
+  * @class controladores.MyModule
+  * @memberOf controladores    
+  */
 .controller('configuracionInicialCtrl', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$ionicPopup', 'ipConf',
   function($scope, $stateParams, $state, $http, $ionicLoading, $ionicPopup, ipConf) {
 
@@ -175,7 +206,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
       }
 
       console.log(respuestas[$scope.numPregunta - 1]);
-      for (var i = 0; i < $scope.respuestasCargadas.length; i++) {
+      for (var i = 0; i &lt; $scope.respuestasCargadas.length; i++) {
         if (respuesta == $scope.respuestasCargadas[i].opcion) {
           $scope.respuestasCargadas[i].color = 'white';
           $scope.respuestasCargadas[i].fondo = '#0092D7';
@@ -184,7 +215,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
           $scope.respuestasCargadas[i].fondo = '';
         }
       }
-      if ($scope.numPregunta < 9) {
+      if ($scope.numPregunta &lt; 9) {
         $scope.numPregunta += 1;
         $scope.enunciado = enunciados[$scope.numPregunta - 1].pregunta;
 
@@ -192,13 +223,13 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
         console.log(respuestas);
         var ip = ipConf;
         $ionicLoading.show();
-        if (localStorage.getItem("grupo")!=null && localStorage.getItem("grupo")!="") {
+        if (localStorage.getItem("grupo")!=null &amp;&amp; localStorage.getItem("grupo")!="") {
            nombreUsu=localStorage.getItem("grupo");
         }
         else{
           nombreUsu=localStorage.getItem("usuario");
         }
-        $http.get(ip + '/agregar-preferencias?usuario=' + nombreUsu+ '&distancia=' + respuestas[0] + '&DistTolerancia=' + respuestas[1] + '&disponibilidad=' + respuestas[3] + '&tiempoMin=0&tiempoMax=' + respuestas[2] + '&tolerancia=' + respuestas[4] + '&tipoEspacio=' + respuestas[5] + '&fotocopiadora=' + respuestas[6])
+        $http.get(ip + '/agregar-preferencias?usuario=' + nombreUsu+ '&amp;distancia=' + respuestas[0] + '&amp;DistTolerancia=' + respuestas[1] + '&amp;disponibilidad=' + respuestas[3] + '&amp;tiempoMin=0&amp;tiempoMax=' + respuestas[2] + '&amp;tolerancia=' + respuestas[4] + '&amp;tipoEspacio=' + respuestas[5] + '&amp;fotocopiadora=' + respuestas[6])
           .success(function(data) {
 
             valorPrivacidad = "";
@@ -208,7 +239,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
               valorPrivacidad = false;
             }
 
-            $http.get(ip + '/agregar-restricciones?usuario=' + nombreUsu + '&privacidad=' + valorPrivacidad + "&movilidad=" + respuestas[8])
+            $http.get(ip + '/agregar-restricciones?usuario=' + nombreUsu + '&amp;privacidad=' + valorPrivacidad + "&amp;movilidad=" + respuestas[8])
               .success(function(data) {
                 $ionicLoading.hide();
                 localStorage.setItem("grupo","")
@@ -287,14 +318,14 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
           $scope.ubicacionesCargadas = [];
           if (tipo == "sitiosEstudio") {
-            $http.get(ip + '/filtrado-sitiosestudio?usuario=' + localStorage.getItem("usuario") + '&latitud=' + position.coords.latitude + '&longitud=' + position.coords.longitude)
+            $http.get(ip + '/filtrado-sitiosestudio?usuario=' + localStorage.getItem("usuario") + '&amp;latitud=' + position.coords.latitude + '&amp;longitud=' + position.coords.longitude)
               .success(function(data) {
 
                 $ionicLoading.hide();
-                for (var i = 0; i < data.length; i++) {
+                for (var i = 0; i &lt; data.length; i++) {
 
 
-                  for (var j = 0; j < ListaServicios.sitiosEstudio.length; j++) {
+                  for (var j = 0; j &lt; ListaServicios.sitiosEstudio.length; j++) {
                     if (data[i].sitio.nombre == ListaServicios.sitiosEstudio[j].message) {
                       ListaServicios.sitiosEstudio[j].disponibilidad = disponibilidadAPalabra(data[i].sitio.estado.disponibilidad);
                       ListaServicios.sitiosEstudio[j].disponibilidadNumerico = data[i].sitio.estado.disponibilidad * 100;
@@ -313,14 +344,14 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
               });
           }
           if (tipo == "restaurantes") {
-            $http.get(ip + '/filtrado-restaurante?usuario=' + localStorage.getItem("usuario") + '&latitud=' + position.coords.latitude + '&longitud=' + position.coords.longitude)
+            $http.get(ip + '/filtrado-restaurante?usuario=' + localStorage.getItem("usuario") + '&amp;latitud=' + position.coords.latitude + '&amp;longitud=' + position.coords.longitude)
               .success(function(data) {
 
                 $ionicLoading.hide();
-                for (var i = 0; i < data.length; i++) {
+                for (var i = 0; i &lt; data.length; i++) {
 
 
-                  for (var j = 0; j < ListaServicios.restaurantes.length; j++) {
+                  for (var j = 0; j &lt; ListaServicios.restaurantes.length; j++) {
                     if (data[i].restaurante.nombre == ListaServicios.restaurantes[j].message) {
                       ListaServicios.restaurantes[j].disponibilidad = disponibilidadAPalabra(data[i].restaurante.estado.disponibilidad);
                       ListaServicios.restaurantes[j].disponibilidadNumerico = data[i].restaurante.estado.disponibilidad * 100;
@@ -340,13 +371,13 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
           }
 
           if (tipo == "fotocopiadoras") {
-            $http.get(ip + '/filtrado-fotocopiadora?usuario=' + localStorage.getItem("usuario") + '&latitud=' + position.coords.latitude + '&longitud=' + position.coords.longitude)
+            $http.get(ip + '/filtrado-fotocopiadora?usuario=' + localStorage.getItem("usuario") + '&amp;latitud=' + position.coords.latitude + '&amp;longitud=' + position.coords.longitude)
               .success(function(data) {
 
                 $ionicLoading.hide();
-                for (var i = 0; i < data.length; i++) {
+                for (var i = 0; i &lt; data.length; i++) {
 
-                  for (var j = 0; j < ListaServicios.fotocopiadoras.length; j++) {
+                  for (var j = 0; j &lt; ListaServicios.fotocopiadoras.length; j++) {
                     if (data[i].fotocopiadora.nombre == ListaServicios.fotocopiadoras[j].message) {
                       console.log(data[i]);
                       ListaServicios.fotocopiadoras[j].disponibilidad = disponibilidadAPalabra(data[i].fotocopiadora.estado.disponibilidad);
@@ -421,7 +452,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
            data=data.reverse();
         }
        
-        for (var i = 0; i < data.length; i++) {
+        for (var i = 0; i &lt; data.length; i++) {
           var date = new Date();
           var diferencia = parseInt((date.getTime() - data[i].fechaPublicacion) / 60000);
           var coment = {
@@ -434,7 +465,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
           };
           $scope.comentariosCargados.push(coment);
         }
-        $http.get(ip + '/verificar-favorito?usuario=' + localStorage.getItem("usuario") + "&sitio=" + $stateParams.nombre)
+        $http.get(ip + '/verificar-favorito?usuario=' + localStorage.getItem("usuario") + "&amp;sitio=" + $stateParams.nombre)
           .success(function(datos) {
             $ionicLoading.hide();
 
@@ -476,11 +507,11 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
         clearInterval(id);
       } else {
         width++;
-        if (width < 33) {
+        if (width &lt; 33) {
 
           elem.style.backgroundColor = "#53EC05";
         } else {
-          if (width < 66) {
+          if (width &lt; 66) {
             elem.style.backgroundColor = "#ffc04c";
           } else {
             elem.style.backgroundColor = "red";
@@ -499,7 +530,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
     var lista = listaResFot.concat(ListaServicios.sitiosEstudio);
     var latFinal = "";
     var lngFinal = "";
-    for (var i = 0; i < lista.length; i++) {
+    for (var i = 0; i &lt; lista.length; i++) {
       if (lista[i].message == $stateParams.nombre) {
         latFinal = lista[i].lat;
         lngFinal = lista[i].lng;
@@ -543,7 +574,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
             .then(function(position) {
 
 
-              $http.get(ip + '/consultar-ruta?latitud=+' + position.coords.latitude + '&longitud=' + position.coords.longitude + '&sitio=' + $stateParams.nombre)
+              $http.get(ip + '/consultar-ruta?latitud=+' + position.coords.latitude + '&amp;longitud=' + position.coords.longitude + '&amp;sitio=' + $stateParams.nombre)
                 .success(function(data) {
                   // ionicLoading.hide();
 
@@ -551,7 +582,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
                   var camino = decode(caminoCodificado, 6);
 
 
-                  for (i = 0; i < camino.length; i++) {
+                  for (i = 0; i &lt; camino.length; i++) {
                     var caminito = {
                       lat: camino[i][0],
                       lng: camino[i][1]
@@ -644,7 +675,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
     $scope.enviarNotificacion = function() {
       if (notificacionEscogida != "") {
         $ionicLoading.show();
-        $http.get(ip + '/agregar-alerta?sitio=' + $stateParams.nombre + '&comentario=' + document.getElementById("comentario").value + '&estado=' + notificacionEscogida+"&usuario="+localStorage.getItem("usuario"))
+        $http.get(ip + '/agregar-alerta?sitio=' + $stateParams.nombre + '&amp;comentario=' + document.getElementById("comentario").value + '&amp;estado=' + notificacionEscogida+"&amp;usuario="+localStorage.getItem("usuario"))
           .success(function(datos) {
             document.getElementById("comentario").value="";
             var alertPopup = $ionicPopup.alert({
@@ -678,7 +709,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
                } 
                 $ionicLoading.hide();
                 $scope.comentariosCargados = [];
-                for (var i = 0; i < data.length; i++) {
+                for (var i = 0; i &lt; data.length; i++) {
                   var date = new Date();
                   var diferencia = parseInt((date.getTime() - data[i].fechaPublicacion) / 60000);
                   var coment = {
@@ -758,7 +789,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
     $scope.cambiarFavorito = function() {
       $ionicLoading.show();
       if ($scope.lugarFavorito == false) {
-        $http.get(ip + '/agregar-favorito?usuario=' + localStorage.getItem("usuario") + "&sitio=" + $stateParams.nombre)
+        $http.get(ip + '/agregar-favorito?usuario=' + localStorage.getItem("usuario") + "&amp;sitio=" + $stateParams.nombre)
           .success(function(datos) {
             $ionicLoading.hide();
             var alertPopup = $ionicPopup.alert({
@@ -780,7 +811,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
 
       } else {
-        $http.get(ip + '/agregar-favorito?usuario=' + localStorage.getItem("usuario") + "&sitio=" + $stateParams.nombre)
+        $http.get(ip + '/agregar-favorito?usuario=' + localStorage.getItem("usuario") + "&amp;sitio=" + $stateParams.nombre)
           .success(function(datos) {
             $ionicLoading.hide();
             var alertPopup = $ionicPopup.alert({
@@ -806,7 +837,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
     $scope.like = function(id) {
       $ionicLoading.show();
-      $http.get(ip + '/retroalimentacion-alerta?sitio=' + $scope.nombreServicio + "&id=" + id + "&tipo=" + "true")
+      $http.get(ip + '/retroalimentacion-alerta?sitio=' + $scope.nombreServicio + "&amp;id=" + id + "&amp;tipo=" + "true")
         .success(function(data) {
           console.log(data);
           if (data.length>0) {
@@ -814,7 +845,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
           }
           $ionicLoading.hide();
           $scope.comentariosCargados = [];
-          for (var i = 0; i < data.length; i++) {
+          for (var i = 0; i &lt; data.length; i++) {
             var date = new Date();
             var diferencia = parseInt((date.getTime() - data[i].fechaPublicacion) / 60000);
             var coment = {
@@ -838,7 +869,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
     $scope.dislike = function(id) {
       $ionicLoading.show();
-      $http.get(ip + '/retroalimentacion-alerta?sitio=' + $scope.nombreServicio + "&id=" + id + "&tipo=" + "false")
+      $http.get(ip + '/retroalimentacion-alerta?sitio=' + $scope.nombreServicio + "&amp;id=" + id + "&amp;tipo=" + "false")
         .success(function(data) {
           console.log(data);
           $ionicLoading.hide();
@@ -846,7 +877,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
           if (data.length>0) {
            data=data.reverse();
           }
-          for (var i = 0; i < data.length; i++) {
+          for (var i = 0; i &lt; data.length; i++) {
             var date = new Date();
             var diferencia = parseInt((date.getTime() - data[i].fechaPublicacion) / 60000);
             var coment = {
@@ -887,18 +918,18 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
       .getCurrentPosition()
       .then(function(position) {
 
-        $http.get(ip + '/servicios-login?usuario=' + localStorage.getItem('usuario') + '&latitud=' + position.coords.latitude + '&longitud=' + position.coords.longitude)
+        $http.get(ip + '/servicios-login?usuario=' + localStorage.getItem('usuario') + '&amp;latitud=' + position.coords.latitude + '&amp;longitud=' + position.coords.longitude)
           .success(function(data) {
             localStorage.setItem("puntaje",data[0].usuario.puntaje);
             
 
             marcadoresIniciales = [];
 
-            for (var i = 0; i < data.length; i++) {
+            for (var i = 0; i &lt; data.length; i++) {
 
               if (data[i].restaurante != null) {
 
-                for (var j = 0; j < ListaServicios.restaurantes.length; j++) {
+                for (var j = 0; j &lt; ListaServicios.restaurantes.length; j++) {
                   if (data[i].restaurante.nombre == ListaServicios.restaurantes[j].message) {
                     ListaServicios.restaurantes[j].disponibilidadNumerico = data[i].restaurante.estado.disponibilidad;
                     ListaServicios.restaurantes[j].icon.iconUrl='img/marcadorRestaurantesRecomendado.png';
@@ -910,7 +941,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
               }
               if (data[i].fotocopiadora != null) {
-                for (var j = 0; j < ListaServicios.fotocopiadoras.length; j++) {
+                for (var j = 0; j &lt; ListaServicios.fotocopiadoras.length; j++) {
                   if (data[i].fotocopiadora.nombre == ListaServicios.fotocopiadoras[j].message) {
                     ListaServicios.fotocopiadoras[j].disponibilidadNumerico = data[i].fotocopiadora.estado.disponibilidad;
                     ListaServicios.fotocopiadoras[j].icon.iconUrl='img/marcadorFotocopiadorasRecomendado.png';
@@ -921,7 +952,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
               }
               if (data[i].sitio != null) {
-                for (var j = 0; j < ListaServicios.sitiosEstudio.length; j++) {
+                for (var j = 0; j &lt; ListaServicios.sitiosEstudio.length; j++) {
                   if (data[i].sitio.nombre == ListaServicios.sitiosEstudio[j].message) {
                     ListaServicios.sitiosEstudio[j].disponibilidadNumerico = data[i].sitio.estado.disponibilidad;
                     ListaServicios.sitiosEstudio[j].icon.iconUrl='img/marcadorSitioEstudioRecomendado.png';
@@ -962,7 +993,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
                     $ionicLoading.hide();
                     console.log("contactos");
                     console.log(data);
-                    for (var i = 0; i < data.length; i++) {
+                    for (var i = 0; i &lt; data.length; i++) {
                       var amigo = {
                         message: data[i].idUsuario,
                         lat: data[i].localizacion.latitud,
@@ -1022,7 +1053,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
     }
 
     $scope.mostrarServicios = function() {
-      if ($scope.servicioActual != "restaurantes" && $scope.servicioActual != 'fotocopiadoras' && $scope.servicioActual != 'sitiosEstudio') {
+      if ($scope.servicioActual != "restaurantes" &amp;&amp; $scope.servicioActual != 'fotocopiadoras' &amp;&amp; $scope.servicioActual != 'sitiosEstudio') {
         if ($scope.mostrarUbicaciones == true) {
           $(".nombreServicioMapa").hide(400);
           $scope.mostrarUbicaciones = false;
@@ -1224,7 +1255,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
     });
 
     $scope.$on('leafletDirectiveMarker.click', function(e, args) {
-      if ($scope.markers[parseInt(args.modelName)].message != "Estas aca!" && $scope.markers[parseInt(args.modelName)].tipo != "amigo") {
+      if ($scope.markers[parseInt(args.modelName)].message != "Estas aca!" &amp;&amp; $scope.markers[parseInt(args.modelName)].tipo != "amigo") {
         $ionicLoading.show();
         console.log($scope.markers[parseInt(args.modelName)]);
         $http.get(ip + '/disponibilidad?sitio=' + $scope.markers[parseInt(args.modelName)].message)
@@ -1280,7 +1311,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
         confirmPopup.then(function(res) {
           if (res) {
             $ionicLoading.show();
-            $http.get(ip + '/eliminar-contacto?usuario=' + localStorage.getItem("usuario") + '&contacto=' + nombreAmigo)
+            $http.get(ip + '/eliminar-contacto?usuario=' + localStorage.getItem("usuario") + '&amp;contacto=' + nombreAmigo)
               .success(function(data) {
                 $ionicLoading.hide();
                 $ionicLoading.show();
@@ -1331,15 +1362,15 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
         mensaje = "Te ha agregado " + localStorage.getItem("usuario");
         if (nombreAmigo.length > 0) {
           $ionicLoading.show();
-          $http.get(ip + '/agregar-contacto?usuario=' + localStorage.getItem("usuario") + '&contacto=' + nombreAmigo)
+          $http.get(ip + '/agregar-contacto?usuario=' + localStorage.getItem("usuario") + '&amp;contacto=' + nombreAmigo)
             .success(function(data) {
 
               console.log(data);
               if (data.idUsuario != null) {
-                $http.get(ip + '/agregar-notificacion?remitente=' + localStorage.getItem("usuario") + '&destinatario=' + nombreAmigo + "&comentario=" + mensaje + '&tipo=amigo')
+                $http.get(ip + '/agregar-notificacion?remitente=' + localStorage.getItem("usuario") + '&amp;destinatario=' + nombreAmigo + "&amp;comentario=" + mensaje + '&amp;tipo=amigo')
                   .success(function(data) {
                     console.log(data);
-                    $http.get(ip + '/agregar-contacto?usuario=' + nombreAmigo + '&contacto=' + localStorage.getItem("usuario"))
+                    $http.get(ip + '/agregar-contacto?usuario=' + nombreAmigo + '&amp;contacto=' + localStorage.getItem("usuario"))
                       .success(function(data) {
                         console.log(data);
                         $ionicLoading.hide();
@@ -1476,7 +1507,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
       var ip = ipConf;
 
-      $http.get(ip + '/crear-grupo?usuario=' + nombreGrupo + '&admin=' + localStorage.getItem("usuario"))
+      $http.get(ip + '/crear-grupo?usuario=' + nombreGrupo + '&amp;admin=' + localStorage.getItem("usuario"))
         .success(function(data) {
           if (data.validacionGrupo==false) {
             $ionicLoading.hide();
@@ -1487,13 +1518,13 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
             return false;
           }
 
-          $http.get(ip + '/agregar-contactogrupo?grupo=' + nombreGrupo + '&usuario=' + localStorage.getItem("usuario"))
+          $http.get(ip + '/agregar-contactogrupo?grupo=' + nombreGrupo + '&amp;usuario=' + localStorage.getItem("usuario"))
             .success(function(data) {
 
 
 
-              for (var i = 0; i < $scope.amigosSeleccionados.length; i++) {
-                $http.get(ip + '/agregar-contactogrupo?grupo=' + nombreGrupo + '&usuario=' + $scope.amigosSeleccionados[i])
+              for (var i = 0; i &lt; $scope.amigosSeleccionados.length; i++) {
+                $http.get(ip + '/agregar-contactogrupo?grupo=' + nombreGrupo + '&amp;usuario=' + $scope.amigosSeleccionados[i])
                   .success(function(data) {
                     
                   }
@@ -1543,7 +1574,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
     $scope.agregarAmigoLista = function(seleccion) {
       esta = false;
-      for (var i = 0; i < $scope.amigosSeleccionados.length; i++) {
+      for (var i = 0; i &lt; $scope.amigosSeleccionados.length; i++) {
         if (seleccion == $scope.amigosSeleccionados[i]) {
           esta = true;
           $scope.amigosSeleccionados.splice(i, 1);
@@ -1575,7 +1606,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
       if (pass.length > 0) {
         if (pass == passwordConfirm) {
           $ionicLoading.show();
-          $http.get(ip + '/validar-usuario?usuario=' + usuario + '&pass=' + pass)
+          $http.get(ip + '/validar-usuario?usuario=' + usuario + '&amp;pass=' + pass)
             .success(function(data) {
 
               console.log(data);
@@ -1643,7 +1674,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
       var nombreUsuario = document.getElementById("usuario").value;
       var password = document.getElementById("password").value;
       $ionicLoading.show();
-      $http.get(ip + '/verificar-usuario?usuario=' + nombreUsuario + '&pass=' + password)
+      $http.get(ip + '/verificar-usuario?usuario=' + nombreUsuario + '&amp;pass=' + password)
         .success(function(data) {
           console.log(data)
           if (data.login == true) {
@@ -1717,7 +1748,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
   function($scope, $stateParams, $ionicHistory, $state) {
     $scope.nombreUsuario = localStorage.getItem("usuario");
     $scope.puntaje=localStorage.getItem("puntaje");
-    if ($scope.puntaje<10) {
+    if ($scope.puntaje&lt;10) {
       $scope.grado="Nuvato"
     }
     if ($scope.puntaje>=10) {
@@ -1753,7 +1784,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
     var lista = ListaServicios.restaurantes;
     var latFinal = "";
     var lngFinal = "";
-    for (var i = 0; i < lista.length; i++) {
+    for (var i = 0; i &lt; lista.length; i++) {
       if (lista[i].message == $stateParams.nombre) {
         latFinal = lista[i].lat;
         lngFinal = lista[i].lng;
@@ -1765,13 +1796,13 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
       .then(function(position) {
 
 
-        $http.get('http://valhalla.mapzen.com/route?json={"locations":[{"lat":' + position.coords.latitude + ',"lon":' + position.coords.longitude + '},{"lat":' + latFinal + ',"lon":' + lngFinal + '}],"costing":"pedestrian","directions_options":{"units":"miles"}}&id=my_work_route&api_key=valhalla-UDVJPyv')
+        $http.get('http://valhalla.mapzen.com/route?json={"locations":[{"lat":' + position.coords.latitude + ',"lon":' + position.coords.longitude + '},{"lat":' + latFinal + ',"lon":' + lngFinal + '}],"costing":"pedestrian","directions_options":{"units":"miles"}}&amp;id=my_work_route&amp;api_key=valhalla-UDVJPyv')
           .success(function(data) {
 
             caminoCodificado = String(data.trip.legs[0].shape);
             var camino = decode(caminoCodificado, 6);
 
-            for (i = 0; i < camino.length; i++) {
+            for (i = 0; i &lt; camino.length; i++) {
               var caminito = {
                 lat: camino[i][0],
                 lng: camino[i][1]
@@ -1837,7 +1868,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
 $scope.enviarAlertaGrupo=function(){
    $ionicLoading.show();
-    $http.get(ip + '/notificacion-broadcast?grupo=' + $scope.nombreGrupo+"&comentario="+localStorage.getItem("usuario")+" creó una notificación en el grupo "+$scope.nombreGrupo+" para el servicio "+$scope.servicioSeleccionado+"   " +document.getElementById("comentarioGrupo").value+"&sitio="+$scope.servicioSeleccionado)
+    $http.get(ip + '/notificacion-broadcast?grupo=' + $scope.nombreGrupo+"&amp;comentario="+localStorage.getItem("usuario")+" creó una notificación en el grupo "+$scope.nombreGrupo+" para el servicio "+$scope.servicioSeleccionado+"   " +document.getElementById("comentarioGrupo").value+"&amp;sitio="+$scope.servicioSeleccionado)
       .success(function(data) {
         $ionicLoading.hide();
         var alertPopup = $ionicPopup.alert({
@@ -1871,16 +1902,16 @@ $scope.enviarAlertaGrupo=function(){
           $scope.ubicacionesCargadas = [];
           if (tipo == "Sitios de Estudio") {
             
-            $http.get(ip + '/filtrado-sitiosestudio?usuario=' + $scope.nombreGrupo + '&latitud=' + position.coords.latitude + '&longitud=' + position.coords.longitude)
+            $http.get(ip + '/filtrado-sitiosestudio?usuario=' + $scope.nombreGrupo + '&amp;latitud=' + position.coords.latitude + '&amp;longitud=' + position.coords.longitude)
               .success(function(data) {
                 $scope.seleccionTipo=true;
                 $scope.todoSeleccionado=false;
 
                 $ionicLoading.hide();
-                for (var i = 0; i < data.length; i++) {
+                for (var i = 0; i &lt; data.length; i++) {
 
 
-                  for (var j = 0; j < ListaServicios.sitiosEstudio.length; j++) {
+                  for (var j = 0; j &lt; ListaServicios.sitiosEstudio.length; j++) {
                     if (data[i].sitio.nombre == ListaServicios.sitiosEstudio[j].message) {
                       ListaServicios.sitiosEstudio[j].disponibilidad = disponibilidadAPalabra(data[i].sitio.estado.disponibilidad);
                       ListaServicios.sitiosEstudio[j].disponibilidadNumerico = data[i].sitio.estado.disponibilidad * 100;
@@ -1900,14 +1931,14 @@ $scope.enviarAlertaGrupo=function(){
           }
           if (tipo == "Restaurantes") {
            
-            $http.get(ip + '/filtrado-restaurante?usuario=' + $scope.nombreGrupo + '&latitud=' + position.coords.latitude + '&longitud=' + position.coords.longitude)
+            $http.get(ip + '/filtrado-restaurante?usuario=' + $scope.nombreGrupo + '&amp;latitud=' + position.coords.latitude + '&amp;longitud=' + position.coords.longitude)
               .success(function(data) {
                 $scope.seleccionTipo=true;
                 $ionicLoading.hide();
-                for (var i = 0; i < data.length; i++) {
+                for (var i = 0; i &lt; data.length; i++) {
 
 
-                  for (var j = 0; j < ListaServicios.restaurantes.length; j++) {
+                  for (var j = 0; j &lt; ListaServicios.restaurantes.length; j++) {
                     if (data[i].restaurante.nombre == ListaServicios.restaurantes[j].message) {
                       ListaServicios.restaurantes[j].disponibilidad = disponibilidadAPalabra(data[i].restaurante.estado.disponibilidad);
                       ListaServicios.restaurantes[j].disponibilidadNumerico = data[i].restaurante.estado.disponibilidad * 100;
@@ -1928,13 +1959,13 @@ $scope.enviarAlertaGrupo=function(){
 
           if (tipo == "Fotocopiadoras") {
             
-            $http.get(ip + '/filtrado-fotocopiadora?usuario=' + $scope.nombreGrupo + '&latitud=' + position.coords.latitude + '&longitud=' + position.coords.longitude)
+            $http.get(ip + '/filtrado-fotocopiadora?usuario=' + $scope.nombreGrupo + '&amp;latitud=' + position.coords.latitude + '&amp;longitud=' + position.coords.longitude)
               .success(function(data) {
                 $scope.seleccionTipo=true;
                 $ionicLoading.hide();
-                for (var i = 0; i < data.length; i++) {
+                for (var i = 0; i &lt; data.length; i++) {
 
-                  for (var j = 0; j < ListaServicios.fotocopiadoras.length; j++) {
+                  for (var j = 0; j &lt; ListaServicios.fotocopiadoras.length; j++) {
                     if (data[i].fotocopiadora.nombre == ListaServicios.fotocopiadoras[j].message) {
                       console.log(data[i]);
                       ListaServicios.fotocopiadoras[j].disponibilidad = disponibilidadAPalabra(data[i].fotocopiadora.estado.disponibilidad);
@@ -1978,7 +2009,7 @@ var decode = function(str, precision) {
     longitude_change,
     factor = Math.pow(10, precision || 6);
 
-  while (index < str.length) {
+  while (index &lt; str.length) {
 
     // Reset shift, result, and byte
     byte = null;
@@ -1987,21 +2018,21 @@ var decode = function(str, precision) {
 
     do {
       byte = str.charCodeAt(index++) - 63;
-      result |= (byte & 0x1f) << shift;
+      result |= (byte &amp; 0x1f) &lt;&lt; shift;
       shift += 5;
     } while (byte >= 0x20);
 
-    latitude_change = ((result & 1) ? ~(result >> 1) : (result >> 1));
+    latitude_change = ((result &amp; 1) ? ~(result >> 1) : (result >> 1));
 
     shift = result = 0;
 
     do {
       byte = str.charCodeAt(index++) - 63;
-      result |= (byte & 0x1f) << shift;
+      result |= (byte &amp; 0x1f) &lt;&lt; shift;
       shift += 5;
     } while (byte >= 0x20);
 
-    longitude_change = ((result & 1) ? ~(result >> 1) : (result >> 1));
+    longitude_change = ((result &amp; 1) ? ~(result >> 1) : (result >> 1));
 
     lat += latitude_change;
     lng += longitude_change;
@@ -2013,12 +2044,34 @@ var decode = function(str, precision) {
 };
 
 var disponibilidadAPalabra = function(porcentaje) {
-  if (porcentaje < 0.4) {
+  if (porcentaje &lt; 0.4) {
     return "Vacio";
   }
-  if (porcentaje < 0.6) {
+  if (porcentaje &lt; 0.6) {
     return "Medio";
   }
   return "Lleno"
 
-}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="controladores.MyModule.html">MyModule</a></li></ul><h3>Namespaces</h3><ul><li><a href="controladores.html">controladores</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.2</a> on Tue Oct 25 2016 12:11:09 GMT-0500 (Hora est. Pacífico, Sudamérica)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

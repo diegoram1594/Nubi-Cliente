@@ -5,11 +5,19 @@
     	<div id="preguntaAtras" ng-hide="esconderRegresar" ng-click="preguntaAnterior()"> <h4 id="textoRegresarPregunta">Regresar</h4>  
     	</div>
     	</div>
-    	<h5 id="numeroPregunta">Pregunta: {{numPregunta}} de 10</h5>
+    	<h5 id="numeroPregunta">Pregunta: {{numPregunta}} de 9</h5>
     	<div id="respuesta" ng-repeat="respuestas in respuestasCargadas"  ng-click="siguientePregunta('{{respuestas.opcion}}')" style="color:{{respuestas.color}};background-color:{{respuestas.fondo}};" ng-hide="opcionNumerico">{{respuestas.opcion}}</div>
-    	<div class = "item range" id="rango" ng-show="opcionNumerico">
-      		<input type = "range" name = "tamanoRango" min="{{minino}}" max="{{maximo}}" ng-model="valorRango" id="rangoNumerico" ">
-   		</div>
+
+    	
+      		<div class = "item range range-calm" id="rango" ng-show="opcionNumerico">
+          <div style="font-weight: bolder;color: #0092D7;text-align: center;">{{minimo}}<br> {{medida}}</div>
+          <input type = "range" name = "tamanoRango" min="{{minimo}}" max="{{maximo}}" ng-model="valorRango" id="rangoNumerico" ">
+          <div style="font-weight: bolder;color: #0092D7; text-align: center;">{{maximo}} <br> {{medida}}</div>
+      </div>
+          
+   		
+      
+
    		<div id="contenedorTextoRango" ng-show="opcionNumerico">{{valorRango}} {{medida}}</div>
       
       <div id="siguiente" ng-show="opcionNumerico" ng-click="siguientePregunta('numero')">Siguiente</div>

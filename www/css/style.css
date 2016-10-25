@@ -186,7 +186,7 @@ body {
     color: #0092D7;
     line-height: 0px;
     box-shadow: 5px 5px 5px grey;
-
+    
 }
 #siguiente{
     position: fixed;
@@ -204,20 +204,22 @@ body {
 
 
 #preguntaAtras{
-  background-image: url(img/back.png);
+  
   background-size: 40px 40px;
   background-repeat: no-repeat;
   background-position: center;
   position: absolute;
-  left: 3%;
+  left: 2%;
   top: 4%;
   opacity: 0.7;
 
 }
 #textoRegresarPregunta{
+  padding: 3px 5px 5px 5px;
+  border: 4px solid;
   color: white;
   position: relative;
-  left: 60px;
+  left: 20px;
   
 }
 #rango{
@@ -354,7 +356,7 @@ body {
 }
 #comentarioUsuario{ 
   display: inline-block; 
-  width: 60%;
+  width: 50%;
   padding-left: 20px;
    }
 

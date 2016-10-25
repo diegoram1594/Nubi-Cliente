@@ -12,15 +12,19 @@
                 
             </label>
         </form>
+        
+        <form id="crearAlertaGrupo-form10" class="list " ng-show="seleccionTipo">
         <h3 id="crearAlertaGrupo-heading6" style="color:#000000;">Lugar</h3>
-        <form id="crearAlertaGrupo-form10" class="list ">
             <label class="item item-select " id="crearAlertaGrupo-select2">
                 <span class="input-label">Lugar</span>
-                <select ng-change="cambioTipo(tipoSeleccionado)" ng-model=servicioSeleccionado>
-                    <option ng-repeat="servicio in servicios" ng-value="servicio.message" ng-click="cambioTipo('{{item}}')">{{servicio.message}}</option>
+                <select ng-change="cambioServicio(servicioSeleccionado)" ng-model=servicioSeleccionado>
+                    <option ng-repeat="servicio in ubicacionesCargadas" ng-value="servicio.message" ng-click="cambioServicio('{{item}}')">{{servicio.message}}</option>
              </select>
             </label>
         </form>
-        <button id="crearAlertaGrupo-button25" class=" button button-positive  button-block ">Enviar a Grupo</button>
+        <label class="item item-input" ng-show="todoSeleccionado">
+              <input type="text" placeholder="Agrega un comentario (opcional)" id="comentarioGrupo"  autocorrect="on">
+          </label>
+        <button id="crearAlertaGrupo-button25" class=" button button-positive  button-block " ng-show="todoSeleccionado" ng-click="enviarAlertaGrupo()">Enviar a Grupo</button>
     </ion-content>
 </ion-view>
