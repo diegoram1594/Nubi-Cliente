@@ -13,7 +13,57 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
   }
 ])
+.controller('acercaCtrl', ['$scope', '$stateParams', '$ionicHistory', '$state',
+  function($scope, $stateParams, $ionicHistory, $state) {
+      $("#nube1").animate({left: "600px"},7000, 'linear',function(){
+      	animacionNube1();
+      });
+       $("#nube2").animate({left: "600px"},6000, 'linear',function(){
+      	animacionNube2();
+      });
+        $("#nube3").animate({left: "600px"},5000, 'linear',function(){
+      	animacionNube3();
+      });
+         $("#nube4").animate({left: "600px"},2000, 'linear',function(){
+      	animacionNube4();
+      });
 
+
+         var animacionNube1=function(){
+         	$("#nube1").css({
+                "left": "-200px"
+              });
+         	$("#nube1").animate({left: "600px"},3000, 'linear',function(){
+      	    animacionNube1();
+          });
+         }
+         var animacionNube2=function(){
+         	$("#nube2").css({
+                "left": "-300px"
+              });
+         	$("#nube2").animate({left: "600px"},6000, 'linear',function(){
+      	    animacionNube2();
+          });
+         }
+         var animacionNube3=function(){
+         	$("#nube3").css({
+                "left": "-500px"
+              });
+         	$("#nube3").animate({left: "600px"},5000, 'linear',function(){
+      	    animacionNube3();
+          });
+         }
+         var animacionNube4=function(){
+         	$("#nube4").css({
+                "left": "-350px"
+              });
+         	$("#nube4").animate({left: "600px"},7000, 'linear',function(){
+      	    animacionNube4();
+          });
+         }
+
+  }
+])
 /** Controlador de plantilla configuracionInicial.html correspondiente a la pantalla de configuración inicial*/
 .controller('configuracionInicialCtrl', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$ionicPopup', 'ipConf',
   function($scope, $stateParams, $state, $http, $ionicLoading, $ionicPopup, ipConf) {
@@ -378,6 +428,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
   /** Controlador de plantilla detallesGrupo.html.html correspondiente a la pantalla de detalles de grupo*/
   .controller('detallesGrupoCtrl', ['$scope', '$stateParams', '$ionicHistory', '$state', '$ionicPopup', '$ionicLoading', '$http', 'ipConf',
     function($scope, $stateParams, $ionicHistory, $state, $ionicPopup, $ionicLoading, $http, ipConf) {
+
       var ip=ipConf;
       $scope.nombreGrupo=$stateParams.nombreGrupo;
       $ionicLoading.show();
@@ -406,6 +457,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 .controller('detalleServicioCtrl', ['$scope', '$stateParams', '$cordovaGeolocation', '$http', '$ionicLoading', '$ionicPopup', 'ListaServicios', 'ipConf',
   function($scope, $stateParams, $cordovaGeolocation, $http, $ionicLoading, $ionicPopup, ListaServicios, ipConf) {
     $scope.botonRuta = "Buscar Ruta";
+    var idComnetarios=[];
     $scope.imagenServicio = $stateParams.imagen;
     $scope.nombreServicio = $stateParams.nombre;
     var valorDisponibilidad = $stateParams.disponibilidad;
@@ -805,7 +857,14 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
     }
 
     $scope.like = function(id) {
+    	var voto=false;
       $ionicLoading.show();
+      for (var i = 0; i <idComnetarios.length; i++) {
+      	 if(idComnetarios[i]==id){
+      	 	voto=true;
+      	 }
+      }
+      if (voto==false) {
       $http.get(ip + '/retroalimentacion-alerta?sitio=' + $scope.nombreServicio + "&id=" + id + "&tipo=" + "true")
         .success(function(data) {
           console.log(data);
@@ -826,6 +885,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
               dislike:data[i].dislike
             };
             $scope.comentariosCargados.push(coment);
+            idComnetarios.push(id);
           }
         }).error(function(data, status, headers, config) {
           $ionicLoading.hide();
@@ -834,10 +894,26 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
             template: 'Revisa tu conexión de internet'
           });
         });
+        }
+        else{
+        	$ionicLoading.hide();
+          var alertPopup = $ionicPopup.alert({
+            title: 'Ya votaste por este comentario',
+            template: ''
+          });
+        }
+
     }
 
     $scope.dislike = function(id) {
+    	var voto=false;
       $ionicLoading.show();
+      for (var i = 0; i < idComnetarios.length; i++) {
+      	 if(idComnetarios[i]==id){
+      	 	voto=true;
+      	 }
+      }
+      if (voto==false) {
       $http.get(ip + '/retroalimentacion-alerta?sitio=' + $scope.nombreServicio + "&id=" + id + "&tipo=" + "false")
         .success(function(data) {
           console.log(data);
@@ -858,6 +934,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
               dislike:data[i].dislike
             };
             $scope.comentariosCargados.push(coment);
+            idComnetarios.push(id);
           }
         }).error(function(data, status, headers, config) {
           $ionicLoading.hide();
@@ -866,6 +943,14 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
             template: 'Revisa tu conexión de internet'
           });
         });
+    	}
+    	else{
+    		$ionicLoading.hide();
+          var alertPopup = $ionicPopup.alert({
+            title: 'Ya votaste por este comentario',
+            template: ''
+          });
+    	}
     }
 
   }
@@ -1000,8 +1085,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
               title: 'Sin conexion con el servidor',
               template: 'Revisa tu conexión de internet e inicia de nuevo NUBI'
             });
-            navigator.app.exitApp();
-
+            
           });
 
 
@@ -1011,7 +1095,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
               title: 'No se detecto GPS',
               template: 'Activa tu GPS para usar NUBI'
             });
-            navigator.app.exitApp();
+           
         
       });
 
@@ -1678,6 +1762,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
 .controller('notificacionesCtrl', ['$scope', '$stateParams', '$http', '$ionicLoading', '$ionicPopup', 'ipConf',
   function($scope, $stateParams, $http, $ionicLoading, $ionicPopup, ipConf) {
+  	$scope.tieneNotificaciones=false;
     var ip = ipConf;
     $scope.notificacionesCargadas = [];
     $ionicLoading.show();
@@ -1688,8 +1773,23 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
         if (data.length>0) {
            data=data.reverse();
+           $scope.tieneNotificaciones=true;
         }
         $scope.notificacionesCargadas = data;
+        for (var i = 0; i < $scope.notificacionesCargadas.length; i++) {
+        	if($scope.notificacionesCargadas[i].tipo=="Notificacion grupo"){
+        		$scope.notificacionesCargadas[i].imagen="img/grupos.png";
+        	}
+        	else{
+        		if ($scope.notificacionesCargadas[i].tipo=="Grupo") {
+        			$scope.notificacionesCargadas[i].imagen="img/grupos.png";
+        		}
+        		else{
+        			$scope.notificacionesCargadas[i].imagen="img/userAdd.png";
+        		}
+        		
+        	}
+        }
         if (data.length==0) {
           $scope.notificacionesCargadas.push("No tienes notificaciones actualmente");
         }
@@ -1837,7 +1937,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
 $scope.enviarAlertaGrupo=function(){
    $ionicLoading.show();
-    $http.get(ip + '/notificacion-broadcast?grupo=' + $scope.nombreGrupo+"&comentario="+localStorage.getItem("usuario")+" creó una notificación en el grupo "+$scope.nombreGrupo+" para el servicio "+$scope.servicioSeleccionado+"   " +document.getElementById("comentarioGrupo").value+"&sitio="+$scope.servicioSeleccionado)
+    $http.get(ip + '/notificacion-broadcast?grupo=' + $scope.nombreGrupo+"&comentario="+localStorage.getItem("usuario")+" creó una notificación en el grupo "+$scope.nombreGrupo+" para el servicio "+$scope.servicioSeleccionadoNombre+"   " +document.getElementById("comentarioGrupo").value+"&sitio="+$scope.servicioSeleccionadoNombre)
       .success(function(data) {
         $ionicLoading.hide();
         var alertPopup = $ionicPopup.alert({
@@ -1857,6 +1957,7 @@ $scope.enviarAlertaGrupo=function(){
 
   $scope.cambioServicio=function(servicio){
     console.log(servicio);
+    $scope.servicioSeleccionadoNombre=servicio;
     $scope.todoSeleccionado=true;
     
   }

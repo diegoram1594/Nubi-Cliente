@@ -153,6 +153,15 @@ angular.module('app.routes', [])
       }
     }
   })
+  .state('menu.acerca', {
+    url: '/acerca',
+    views: {
+      'side-menu21': {
+        templateUrl: 'templates/acerca.html',
+        controller: 'acercaCtrl'
+      }
+    }
+  })
   .state('menu.crearGrupo', {
     url: '/crearGrupo',
     views: {

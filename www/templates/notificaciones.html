@@ -1,8 +1,9 @@
 <ion-view title="Notificaciones" id="page16">
     <ion-content padding="true" class="has-header">
+     <h2 style="color: grey" ng-hide="tieneNotificaciones"> No tienes notificaciones :(</h2>
         <ion-list id="listaDeAmigos-list4" ng-repeat="notificaciones in notificacionesCargadas">
             <ion-item class="item-avatar  " id="listaDeAmigos-list-item24">
-            <img src="img/userAdd.png">
+            <img src="{{notificaciones.imagen}}">
                 <h2>{{notificaciones.comentario}}</h2>
                 <h4 class="textoListaServicios" ng-click="verDetalles('{{notificaciones.comentario}}')">ver detalles</h4>
                 

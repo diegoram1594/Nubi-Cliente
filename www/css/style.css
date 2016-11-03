@@ -399,5 +399,51 @@ body {
   text-align: right;
   color: grey;
 }
-
-
+#nube1{
+    width:100px;
+    height:40px; 
+    background-image: url(img/nube.png);
+  background-repeat: no-repeat;
+    background-position: center;
+    background-size: 60px 40px;
+    position:fixed;
+    top: 20%;
+    z-index:-1;
+    left: -200px;
+}
+#nube2{
+    width:100px;
+    height:40px; 
+    background-image: url(img/nube.png);
+  background-repeat: no-repeat;
+    background-position: center;
+    background-size: 60px 40px;
+    position:fixed;
+    top: 45%;
+    z-index:-1;
+    left: -300px;
+}
+#nube3{
+    width:100px;
+    height:40px; 
+    background-image: url(img/nube.png);
+  background-repeat: no-repeat;
+    background-position: center;
+    background-size: 60px 40px;
+    position:fixed;
+    z-index:-1;
+    top: 50%;
+    left: -500px;
+}
+#nube4{
+    width:100px;
+    height:40px; 
+    background-image: url(img/nube.png);
+  background-repeat: no-repeat;
+    background-position: center;
+    background-size: 60px 40px;
+    position:fixed;
+    top: 70%;
+    z-index:-1;
+    left: -350px;
+}
