@@ -1,7 +1,8 @@
 angular.module('app.services', [])
 
 .factory('ipConf', [function(){
-  return "http://192.168.43.117:8080/NUBI_REST0_3_war_exploded/nubi";
+  //return "http://192.168.43.117:8080/NUBI_REST0_3_war_exploded/nubi";
+  return "http://192.168.0.5:8080/NUBI_REST0_3_war_exploded/nubi";
 }])
 
 .factory('ListaServicios', [ function() {

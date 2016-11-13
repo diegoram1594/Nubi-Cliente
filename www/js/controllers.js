@@ -2,7 +2,7 @@
   * @namespace controladores
   */
 angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
-/** Controlador de plantilla configuracion.html correspondiente a la pantalla de configuración*/
+/** Controlador de plantilla configuracion.html*/
 .controller('configuracionCtrl', ['$scope', '$stateParams', '$ionicHistory', '$state',
   function($scope, $stateParams, $ionicHistory, $state) {
     /** Función que lleva a la pantalla de Configuración Inicial*/
@@ -13,6 +13,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
   }
 ])
+/** Controlador de plantilla acerca.html*/
 .controller('acercaCtrl', ['$scope', '$stateParams', '$ionicHistory', '$state',
   function($scope, $stateParams, $ionicHistory, $state) {
       $("#nube1").animate({left: "600px"},7000, 'linear',function(){
@@ -28,7 +29,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
       	animacionNube4();
       });
 
-
+         /** Funciones que animan las nubes que aparecen atrás de los textos*/
          var animacionNube1=function(){
          	$("#nube1").css({
                 "left": "-200px"
@@ -64,7 +65,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
   }
 ])
-/** Controlador de plantilla configuracionInicial.html correspondiente a la pantalla de configuración inicial*/
+/** Controlador de plantilla configuracionInicial.html */
 .controller('configuracionInicialCtrl', ['$scope', '$stateParams', '$state', '$http', '$ionicLoading', '$ionicPopup', 'ipConf',
   function($scope, $stateParams, $state, $http, $ionicLoading, $ionicPopup, ipConf) {
 
@@ -323,7 +324,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
   }
 ])
 
-//** Controlador de plantilla listaServicios.html.html correspondiente a la pantalla de lista de servicios*/
+//** Controlador de plantilla listaServicios.html.html*/
 .controller('listaServiciosCtrl', ['$scope', '$stateParams', '$cordovaGeolocation', '$http', '$ionicLoading', '$ionicPopup', 'ListaServicios', 'ipConf',
     function($scope, $stateParams, $cordovaGeolocation, $http, $ionicLoading, $ionicPopup, ListaServicios, ipConf) {
       var tipo = $stateParams.tipo;
@@ -446,14 +447,40 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
                                template: 'Revisa tu conexión de internet'
                               });
               });
-
+      /** Función que lleva a la pantalla de crear alerta grupo*/
       $scope.crearAlertaGrupo= function(){
         $state.go('menu.crearAlertaGrupo',{nombreGrupo:$scope.nombreGrupo});
+      }
+      /** Función que elimina el grupo si el usuario es el administrador*/
+      $scope.eliminarGrupo= function(){
+        $ionicLoading.show();
+            $http.get(ip+'/eliminar-grupo?grupo='+$scope.nombreGrupo+'&admin='+localStorage.getItem('usuario'))
+              .success(function (data) {
+                $ionicLoading.hide();
+
+                console.log(data);
+                if (data.eliminacion==false) {
+                	var alertPopup = $ionicPopup.alert({
+                              title: 'No puedes eliminar el grupo',
+                               template: 'Solo el administrador puede realizar esta acción'
+                              });
+                }
+                else{
+                	$state.go('menu.listaGrupos');
+                }
+                           
+              }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 var alertPopup = $ionicPopup.alert({
+                              title: 'Sin conexion con el servidor',
+                               template: 'Revisa tu conexión de internet'
+                              });
+              });
       }
 
     }
   ])
-
+/** Controlador de plantilla detalleServicio.html.html */
 .controller('detalleServicioCtrl', ['$scope', '$stateParams', '$cordovaGeolocation', '$http', '$ionicLoading', '$ionicPopup', 'ListaServicios', 'ipConf',
   function($scope, $stateParams, $cordovaGeolocation, $http, $ionicLoading, $ionicPopup, ListaServicios, ipConf) {
     $scope.botonRuta = "Buscar Ruta";
@@ -522,7 +549,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
     var elem = document.getElementById("myBar");
     var width = 1;
     var id = setInterval(frame, 10);
-
+    /** Función que anima la barra de estado de disponibilidad*/
     function frame() {
       if (width >= valorDisponibilidad) {
         clearInterval(id);
@@ -562,7 +589,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
     angular.extend($scope, {
       defaults: {
-        tileLayer: 'http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png',
+        tileLayer: 'http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
         maxZoom: 18,
         minZoom: 17,
         zoomControlPosition: 'bottomleft'
@@ -582,7 +609,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
         }
       },
     });
-
+    /** Función que muestra el mapa con los puntos y su ruta*/
     $scope.mostrarRuta = function() {
       if ($scope.botonRuta == "Buscar Ruta") {
         $scope.botonRuta = "Quitar Ruta";
@@ -659,7 +686,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
       }
     }
-
+    /** Función que muestra el panel para añadir una nueva alerta de disponibilidad*/
     $scope.abrirPanelNotificacion = function() {
       $scope.panelNotificacionActivado = true;
       $scope.botonBuscarRuta = false;
@@ -672,6 +699,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
 
     }
+    /** Función que esconde el panel para añadir una nueva alerta de disponibilidad*/
     $scope.cancelarPanelNotificacion = function() {
       $scope.panelNotificacionActivado = false;
       $scope.botonBuscarRuta = false;
@@ -693,6 +721,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
       $scope.notificacionSeleccionada = false;
     }
     notificacionEscogida = "";
+    /** Función que envía la alerta de disponibildiad*/
     $scope.enviarNotificacion = function() {
       if (notificacionEscogida != "") {
         $ionicLoading.show();
@@ -766,7 +795,10 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
         });
       }
     }
-
+   /** 
+    * Función que resalta la selección de la disponibilidad del usuario
+    * @param {string} respuesta – opción escogida por el usuario
+    */
     $scope.seleccionDisponibilidad = function(eleccion) {
       $scope.notificacionSeleccionada = true;
       if (eleccion == "Libre") {
@@ -806,7 +838,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
         });
       }
     }
-
+    /** Función que selecciona/deselecciona el estado favorito de un servicio*/
     $scope.cambiarFavorito = function() {
       $ionicLoading.show();
       if ($scope.lugarFavorito == false) {
@@ -855,7 +887,10 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
       }
     }
-
+    /** 
+    * Función que aprueba una alerta de otro usuario
+    * @param {string} id – identificador único de comentario
+    */
     $scope.like = function(id) {
     	var voto=false;
       $ionicLoading.show();
@@ -904,7 +939,10 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
         }
 
     }
-
+    /** 
+    * Función que desaprueba una alerta de otro usuario
+    * @param {string} id – identificador único de comentario
+    */
     $scope.dislike = function(id) {
     	var voto=false;
       $ionicLoading.show();
@@ -955,7 +993,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
   }
 ])
-
+/** Controlador de plantilla home.html */
 .controller('homeCtrl', ['$scope', '$cordovaGeolocation', '$http', '$window', '$state', '$ionicLoading', '$ionicPopup', 'ListaServicios', 'ipConf',
   function($scope, $cordovaGeolocation, $http, $window, $state, $ionicLoading, $ionicPopup, ListaServicios, ipConf) {
     $(".nombreServicioMapa").hide();
@@ -1098,13 +1136,13 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
            
         
       });
-
+	/** Función que lleva al usuario a la pantalla de notificaciones*/
     $scope.irNotificaciones = function() {
       $scope.mostarNotificaciones = false;
       $scope.numeroNotificaciones = 0;
       $state.go('menu.notificaciones');
     }
-
+    /** Función realiza las animaciones para que se muestre los tipos de servicio a filtrar*/
     $scope.mostrarServicios = function() {
       if ($scope.servicioActual != "restaurantes" && $scope.servicioActual != 'fotocopiadoras' && $scope.servicioActual != 'sitiosEstudio') {
         if ($scope.mostrarUbicaciones == true) {
@@ -1168,7 +1206,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
       }
     };
 
-
+    /** Función que lleva a la pantalla de lista de servicios del tipo escogido previamente*/
     $scope.irListaServicios = function() {
       $scope.mostrarUbicaciones = false;
       $("#botonBusquedaHome").css({
@@ -1193,7 +1231,10 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
       });
       $scope.servicioActual = 'ninguno';
     }
-
+    /** 
+    * Función que muestra en el mapa todos los servicios de un tipo seleccionado
+    * @param {string} tipoServicio – puede ser de restaurantes, sitios de estudio o fotocopiadoras
+    */
     $scope.mostrarEnMapa = function(tipoServicio) {
       $(".nombreServicioMapa").hide(400);
       $("#verLista").animate({
@@ -1239,7 +1280,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
       $scope.localizarGPS();
 
     }
-
+    /** Función que usa el GPS y muestra la posición del usuario en el mapa*/
     $scope.localizarGPS = function() {
 
       $cordovaGeolocation
@@ -1276,7 +1317,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
       defaults: {
         //'http://{s}.tile.osm.org/{z}/{x}/{y}.png'
         //'http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png'
-        tileLayer: 'http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png',
+        tileLayer: 'http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
         maxZoom: 18,
         minZoom: 17,
         zoomControl: false,
@@ -1306,6 +1347,11 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
 
     });
+    /** 
+    * Función que al tocar un marcador de un servicio lleva a la pantalla de detalle de este 
+    * @param {Object} e – variable entregada por Leaflet.js
+     * @param {Object} arg – detalles de opción seleccionada, cuyo atributo modelName identifica el marcador
+    */
 
     $scope.$on('leafletDirectiveMarker.click', function(e, args) {
       if ($scope.markers[parseInt(args.modelName)].message != "Estas aca!" && $scope.markers[parseInt(args.modelName)].tipo != "amigo") {
@@ -1337,6 +1383,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
   }
 ])
 
+/** Controlador de plantilla listaDeAmigos.html */
 .controller('listaDeAmigosCtrl', ['$scope', '$stateParams', '$http', '$ionicLoading', '$ionicPopup', 'ipConf',
     function($scope, $stateParams, $http, $ionicLoading, $ionicPopup, ipConf) {
       var ip = ipConf;
@@ -1354,7 +1401,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
             template: 'Revisa tu conexión de internet'
           });
         });
-
+       /** Función que elimina a un amigo confirmando la acción anteriormente*/
       $scope.eliminarAmigo = function(nombreAmigo) {
         var confirmPopup = $ionicPopup.confirm({
           title: 'Eliminar amigo',
@@ -1406,10 +1453,11 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
     }
   ])
+/** Controlador de plantilla agregarAmigo.html */
   .controller('agregarAmigoCtrl', ['$scope', '$stateParams', '$http', '$ionicLoading', '$ionicPopup', '$state', '$ionicHistory', 'ipConf',
     function($scope, $stateParams, $http, $ionicLoading, $ionicPopup, $state, $ionicHistory, ipConf) {
       var ip = ipConf;
-
+      /** Función que agrega a un amigo notificando error en caso de no encontrar un usuario registrado con ese nombre */
       $scope.agregarAmigo = function() {
         nombreAmigo = document.getElementById("nombreAmigo").value;
         mensaje = "Te ha agregado " + localStorage.getItem("usuario");
@@ -1476,7 +1524,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
     }
   ])
-
+/** Controlador de plantilla serviciosEnMapa.html */
 .controller('serviciosEnMapaCtrl', ['$scope', '$stateParams', 'ListaServicios',
   function($scope, $stateParams, ListaServicios) {
     var locations = ListaServicios.restaurantes;
@@ -1497,7 +1545,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
     });
   }
 ])
-
+/** Controlador de plantilla listaGrupos.html */
 .controller('listaGruposCtrl', ['$scope', '$stateParams', '$ionicHistory', '$state', '$ionicPopup', '$ionicLoading', '$http', 'ipConf',
   function($scope, $stateParams, $ionicHistory, $state, $ionicPopup, $ionicLoading, $http, ipConf) {
     var ip = ipConf;
@@ -1516,7 +1564,10 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
           template: 'Revisa tu conexión de internet'
         });
       });
-
+    /** 
+    * Función que lleva a la pantalla de detalles de grupo
+    * @param {string} grupo – nombre de grupo
+    */
     $scope.irDetalleGrupo=function(grupo){
 
       $state.go('menu.detallesGrupo',{nombreGrupo:grupo});
@@ -1524,7 +1575,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 
   }
 ])
-
+/** Controlador de plantilla crearGrupo.html */
 .controller('crearGrupoCtrl', ['$scope', '$stateParams', '$ionicHistory', '$state', '$ionicPopup', '$ionicLoading', '$http', 'ipConf',
   function($scope, $stateParams, $ionicHistory, $state, $ionicPopup, $ionicLoading, $http, ipConf) {
     $ionicLoading.show();
@@ -1544,7 +1595,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
           template: 'Revisa tu conexión de internet'
         });
       });
-
+    /** Función que crea un nuevo grupo incluyendo sus integrantes */
     $scope.crearGrupo = function() {
       $ionicLoading.show();
       nombreGrupo = document.getElementById("nombreGrupo").value;
@@ -1624,7 +1675,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
     }
 
 
-
+    /** Función que agrega un amigo a una lista temporal con el fin de que sea mandada al final cuando se cree el grupo */
     $scope.agregarAmigoLista = function(seleccion) {
       esta = false;
       for (var i = 0; i < $scope.amigosSeleccionados.length; i++) {
@@ -1643,14 +1694,12 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
   }
 ])
 
-
+/** Controlador de plantilla registro.html */
 .controller('registroCtrl', ['$scope', '$stateParams', '$ionicHistory', '$state', '$ionicPopup', '$ionicLoading', '$http', 'ipConf',
   function($scope, $stateParams, $ionicHistory, $state, $ionicPopup, $ionicLoading, $http, ipConf) {
     var ip = ipConf;
-
+    /** Función que realiza el registro de un usuario nuevo dado su usuario de la PUJ y su contraseña*/
     $scope.registro = function() {
-
-
 
       var usuario = document.getElementById("usuarioReg").value;
       var pass = document.getElementById("pass").value;
@@ -1715,6 +1764,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
   }
 ])
 
+/** Controlador de plantilla login.html */
 .controller('loginCtrl', ['$scope', '$stateParams', '$ionicHistory', '$state', '$http', '$ionicPopup', '$ionicLoading', 'ipConf',
   function($scope, $stateParams, $ionicHistory, $state, $http, $ionicPopup, $ionicLoading, ipConf) {
     var ip = ipConf;
@@ -1722,6 +1772,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
     if (localStorage.getItem("usuario") != null) {
       $state.go('menu.home');
     }
+    /** Función que realiza la verificación de un usuario registrado previamente dando su usuario de la PUJ y su contraseña, para posteriormente llevarlo a la pantalla de Home*/
     $scope.login = function() {
       localStorage.clear();
       var nombreUsuario = document.getElementById("usuario").value;
@@ -1759,7 +1810,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
 ])
 
 
-
+/** Controlador de plantilla notificaciones.html */
 .controller('notificacionesCtrl', ['$scope', '$stateParams', '$http', '$ionicLoading', '$ionicPopup', 'ipConf',
   function($scope, $stateParams, $http, $ionicLoading, $ionicPopup, ipConf) {
   	$scope.tieneNotificaciones=false;
@@ -1803,7 +1854,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
           template: 'Revisa tu conexión de internet'
         });
       });
-
+      /** Función que permite ver los detalles de las notificaciones en una ventana emergente*/
   $scope.verDetalles=function(mensaje){
     var alertPopup = $ionicPopup.alert({
           title: 'Detalle notificación',
@@ -1812,7 +1863,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
   }
   }
 ])
-
+/** Controlador de plantilla detalleServicio.html */
 .controller('menuCtrl', ['$scope', '$stateParams', '$ionicHistory', '$state',
   function($scope, $stateParams, $ionicHistory, $state) {
     $scope.nombreUsuario = localStorage.getItem("usuario");
@@ -1832,7 +1883,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
     if ($scope.puntaje>=70) {
       $scope.grado="Nuvato"
     }
-
+    /** Función que permite cerrar sesión además cierra la aplicación*/
     $scope.cerrarSesion = function() {
       localStorage.clear();
       $ionicHistory.nextViewOptions({
@@ -1845,7 +1896,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
   }
 ])
 
-
+/** Controlador de plantilla buscarRuta.html */
 .controller('buscarRutaCtrl', ['$scope', '$stateParams', '$http', '$cordovaGeolocation', 'ListaServicios',
   function($scope, $stateParams, $http, $cordovaGeolocation, ListaServicios) {
     var caminoCodificado = "";
@@ -1923,6 +1974,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
   }
 ])
 
+/** Controlador de plantilla crearAlertaGrupo.html */
 .controller('crearAlertaGrupoCtrl', ['$scope', '$stateParams', '$ionicHistory', '$state', '$ionicPopup', '$ionicLoading', '$http', '$cordovaGeolocation','ipConf','ListaServicios',
     function($scope, $stateParams, $ionicHistory, $state, $ionicPopup, $ionicLoading, $http,$cordovaGeolocation, ipConf,ListaServicios) {
      var ip=ipConf;
@@ -1934,7 +1986,7 @@ angular.module('app.controllers', ['leaflet-directive', 'ngAnimate'])
    ];
   $scope.seleccionTipo=false;
   $scope.todoSeleccionado=false;
-
+/** Función que envía una alerta a todos los integrantes del grupo */
 $scope.enviarAlertaGrupo=function(){
    $ionicLoading.show();
     $http.get(ip + '/notificacion-broadcast?grupo=' + $scope.nombreGrupo+"&comentario="+localStorage.getItem("usuario")+" creó una notificación en el grupo "+$scope.nombreGrupo+" para el servicio "+$scope.servicioSeleccionadoNombre+"   " +document.getElementById("comentarioGrupo").value+"&sitio="+$scope.servicioSeleccionadoNombre)
@@ -1954,7 +2006,7 @@ $scope.enviarAlertaGrupo=function(){
         });
       });
 }
-
+	/** Función que guarda un servicio temporalmente para cuando se envíe la alerta */
   $scope.cambioServicio=function(servicio){
     console.log(servicio);
     $scope.servicioSeleccionadoNombre=servicio;
@@ -1962,7 +2014,10 @@ $scope.enviarAlertaGrupo=function(){
     
   }
 
-   
+   	/** 
+    * Función que cambia el tipo de servicios y los muestra
+    * @param {string} tipo – tipo de servicio a cambiar
+    */
       $scope.cambioTipo=function(tipo){
         $ionicLoading.show();
       $cordovaGeolocation
@@ -2067,6 +2122,7 @@ $scope.enviarAlertaGrupo=function(){
   }
 ])
 
+/** Función global que decodifica la ruta para que sea interpretada por Leaflet*/
 var decode = function(str, precision) {
   var index = 0,
     lat = 0,
@@ -2112,7 +2168,10 @@ var decode = function(str, precision) {
 
   return coordinates;
 };
-
+/** 
+    * Función que convierte a palabras el porcentaje de disponibilidad de un servicio
+    * @param {float} porcentaje – disponibilidad de servicio en número flotante
+    */
 var disponibilidadAPalabra = function(porcentaje) {
   if (porcentaje < 0.4) {
     return "Vacio";
